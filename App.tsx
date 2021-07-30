@@ -1,13 +1,14 @@
-import { StatusBar } from "expo-status-bar";
+import { ApolloProvider } from "@apollo/client";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+
+import client from "./src/graphql/client";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ApolloProvider client={client}>
+      <View style={styles.container} />
+    </ApolloProvider>
   );
 }
 

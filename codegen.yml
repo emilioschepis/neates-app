@@ -1,0 +1,17 @@
+overwrite: true
+schema:
+  - "http://localhost:8080/v1/graphql":
+      headers:
+        "X-Hasura-Admin-Secret": ${HASURA_GRAPHQL_ADMIN_SECRET}
+        "X-Hasura-Role": "user"
+documents:
+  - src/graphql/queries.graphql
+  - src/graphql/mutations.graphql
+generates:
+  src/graphql/generated.tsx:
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo

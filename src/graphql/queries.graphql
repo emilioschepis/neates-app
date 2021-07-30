@@ -1,0 +1,7 @@
+query Notes {
+  notes: note {
+    id
+    location
+    content
+  }
+}

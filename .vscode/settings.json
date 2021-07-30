@@ -1,4 +1,8 @@
 {
+  "[graphql]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[json]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -16,5 +20,9 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true
     }
+  },
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
