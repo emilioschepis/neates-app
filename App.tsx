@@ -2,12 +2,15 @@ import { ApolloProvider } from "@apollo/client";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import { AuthProvider } from "./src/context/AuthContext";
 import client from "./src/graphql/client";
 
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <View style={styles.container} />
+      <AuthProvider>
+        <View style={styles.container} />
+      </AuthProvider>
     </ApolloProvider>
   );
 }
