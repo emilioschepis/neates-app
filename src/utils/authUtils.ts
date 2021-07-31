@@ -1,4 +1,5 @@
 import jwt from "expo-jwt";
+import { SupportedAlgorithms } from "expo-jwt/dist/types/algorithms";
 
 import firebase from "../firebase/firebase";
 
@@ -36,4 +37,42 @@ export async function waitForClaims(
       throw new Error("Wait for claims exceeded timeout.");
     }
   }
+}
+
+export async function getCurrentUser(): Promise<firebase.User | null> {
+  return new Promise<firebase.User | null>((resolve) => {
+    if (firebase.auth().currentUser) {
+      return resolve(firebase.auth().currentUser);
+    }
+
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
+}
+
+export async function getCurrentToken(): Promise<string | null> {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return null;
+  }
+
+  const currentToken = await currentUser.getIdToken();
+
+  if (__DEV__) {
+    // Locally sign the user token to make it compatible with Hasura's token validation
+    const decoded = jwt.decode(currentToken, "");
+
+    const signedToken = jwt.encode(
+      decoded,
+      "local-only-hs256-key-00000000000",
+      { algorithm: SupportedAlgorithms.HS256 }
+    );
+
+    return signedToken;
+  }
+
+  return currentToken;
 }
