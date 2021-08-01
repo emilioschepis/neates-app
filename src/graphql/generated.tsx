@@ -122,6 +122,8 @@ export type Note = {
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
   location: Scalars['geography'];
+  /** An object relationship */
+  user: User;
   user_id: Scalars['String'];
 };
 
@@ -134,6 +136,7 @@ export type Note_Bool_Exp = {
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   location?: Maybe<Geography_Comparison_Exp>;
+  user?: Maybe<User_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -143,6 +146,7 @@ export type Note_Order_By = {
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   location?: Maybe<Order_By>;
+  user?: Maybe<User_Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -347,6 +351,11 @@ export type NotesQuery = (
   & { notes: Array<(
     { __typename?: 'note' }
     & Pick<Note, 'id' | 'content' | 'location'>
+    & { createdAt: Note['created_at'] }
+    & { user: (
+      { __typename?: 'user' }
+      & Pick<User, 'username'>
+    ) }
   )> }
 );
 
@@ -359,6 +368,10 @@ export const NotesDocument = gql`
     id
     content
     location
+    createdAt: created_at
+    user {
+      username
+    }
   }
 }
     `;

@@ -2,13 +2,13 @@ import React, { useState, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import CustomMap from "../components/CustomMap";
-import { useMarkers } from "../hooks/useMarkers";
+import useNotes from "../hooks/useNotes";
 import Location from "../models/location";
 import { LocationConstants } from "../utils/constants";
 
 const MapScreen = () => {
   const [location, setLocation] = useState<Location | null>(null);
-  const { markers } = useMarkers(location);
+  const { notes } = useNotes(location);
 
   const handleUserLocationChange = useCallback(
     (newLocation: Location) => {
@@ -29,7 +29,7 @@ const MapScreen = () => {
   return (
     <View style={styles.container}>
       <CustomMap
-        markers={markers}
+        notes={notes}
         onUserLocationChange={handleUserLocationChange}
       />
     </View>

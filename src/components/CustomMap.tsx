@@ -1,16 +1,22 @@
 import React, { useCallback } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import MapView, { Marker as MarkerView, Region } from "react-native-maps";
+import MapView, {
+  Callout,
+  Marker as MarkerView,
+  Region,
+} from "react-native-maps";
 
+import { NotesQuery } from "../graphql/generated";
 import Location from "../models/location";
-import Marker from "../models/marker";
+import CustomCallout from "./CustomCallout";
+import CustomMarker from "./CustomMarker";
 
 type CustomMapProps = {
-  markers: Marker[];
+  notes: NotesQuery["notes"];
   onUserLocationChange: (location: Location) => void;
 };
 
-const CustomMap = ({ markers, onUserLocationChange }: CustomMapProps) => {
+const CustomMap = ({ notes, onUserLocationChange }: CustomMapProps) => {
   const handleRegionChangeComplete = useCallback(
     (region: Region) => {
       const location = new Location(region.latitude, region.longitude);
@@ -30,15 +36,19 @@ const CustomMap = ({ markers, onUserLocationChange }: CustomMapProps) => {
         pitchEnabled={false}
         onRegionChangeComplete={handleRegionChangeComplete}
       >
-        {markers.map((marker) => (
+        {notes.map((note) => (
           <MarkerView
-            key={marker.id}
-            title={marker.title}
+            key={note.id}
             coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
+              latitude: note.location.coordinates[1],
+              longitude: note.location.coordinates[0],
             }}
-          />
+          >
+            <CustomMarker />
+            <Callout>
+              <CustomCallout note={note} />
+            </Callout>
+          </MarkerView>
         ))}
       </MapView>
     </View>

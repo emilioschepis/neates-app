@@ -12,5 +12,9 @@ query Notes($latitude: Float!, $longitude: Float!, $distance: Float! = 100) {
     id
     content
     location
+    createdAt: created_at
+    user {
+      username
+    }
   }
 }
