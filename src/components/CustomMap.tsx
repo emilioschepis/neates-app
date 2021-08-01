@@ -1,28 +1,19 @@
 import React, { useCallback } from "react";
-import { Dimensions, View, StyleSheet } from "react-native";
-import MapView, { EventUserLocation } from "react-native-maps";
+import { Dimensions, StyleSheet, View } from "react-native";
+import MapView, { Marker as MarkerView, Region } from "react-native-maps";
 
 import Location from "../models/location";
+import Marker from "../models/marker";
 
 type CustomMapProps = {
+  markers: Marker[];
   onUserLocationChange: (location: Location) => void;
 };
 
-const CustomMap = ({ onUserLocationChange }: CustomMapProps) => {
-  const handleUserLocationChange = useCallback(
-    (event: EventUserLocation) => {
-      if (
-        !event.nativeEvent?.coordinate?.latitude ||
-        !event.nativeEvent?.coordinate?.longitude
-      ) {
-        return;
-      }
-
-      const location = new Location(
-        event.nativeEvent.coordinate.latitude,
-        event.nativeEvent.coordinate.longitude
-      );
-
+const CustomMap = ({ markers, onUserLocationChange }: CustomMapProps) => {
+  const handleRegionChangeComplete = useCallback(
+    (region: Region) => {
+      const location = new Location(region.latitude, region.longitude);
       onUserLocationChange(location);
     },
     [onUserLocationChange]
@@ -37,8 +28,19 @@ const CustomMap = ({ onUserLocationChange }: CustomMapProps) => {
         scrollEnabled={false}
         zoomEnabled={false}
         pitchEnabled={false}
-        onUserLocationChange={handleUserLocationChange}
-      />
+        onRegionChangeComplete={handleRegionChangeComplete}
+      >
+        {markers.map((marker) => (
+          <MarkerView
+            key={marker.id}
+            title={marker.title}
+            coordinate={{
+              latitude: marker.latitude,
+              longitude: marker.longitude,
+            }}
+          />
+        ))}
+      </MapView>
     </View>
   );
 };

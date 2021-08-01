@@ -1,16 +1,18 @@
 import React, { useState, useCallback } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import CustomMap from "../components/CustomMap";
+import { useMarkers } from "../hooks/useMarkers";
 import Location from "../models/location";
 import { LocationConstants } from "../utils/constants";
 
 const MapScreen = () => {
   const [location, setLocation] = useState<Location | null>(null);
+  const { markers } = useMarkers(location);
 
   const handleUserLocationChange = useCallback(
     (newLocation: Location) => {
-      if (location === null) {
+      if (!location) {
         setLocation(newLocation);
         return;
       }
@@ -18,7 +20,6 @@ const MapScreen = () => {
       const distance = newLocation.distance(location);
 
       if (distance >= LocationConstants.minimumRefetchDistance) {
-        console.log(distance);
         setLocation(newLocation);
       }
     },
@@ -27,7 +28,10 @@ const MapScreen = () => {
 
   return (
     <View style={styles.container}>
-      <CustomMap onUserLocationChange={handleUserLocationChange} />
+      <CustomMap
+        markers={markers}
+        onUserLocationChange={handleUserLocationChange}
+      />
     </View>
   );
 };

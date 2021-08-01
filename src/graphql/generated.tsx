@@ -13,7 +13,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  point: any;
+  geography: any;
+  geometry: any;
   timestamptz: any;
   uuid: any;
 };
@@ -52,15 +53,75 @@ export type String_Comparison_Exp = {
   _similar?: Maybe<Scalars['String']>;
 };
 
+
+export type Geography_Cast_Exp = {
+  geometry?: Maybe<Geometry_Comparison_Exp>;
+};
+
+/** Boolean expression to compare columns of type "geography". All fields are combined with logical 'AND'. */
+export type Geography_Comparison_Exp = {
+  _cast?: Maybe<Geography_Cast_Exp>;
+  _eq?: Maybe<Scalars['geography']>;
+  _gt?: Maybe<Scalars['geography']>;
+  _gte?: Maybe<Scalars['geography']>;
+  _in?: Maybe<Array<Scalars['geography']>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _lt?: Maybe<Scalars['geography']>;
+  _lte?: Maybe<Scalars['geography']>;
+  _neq?: Maybe<Scalars['geography']>;
+  _nin?: Maybe<Array<Scalars['geography']>>;
+  /** is the column within a given distance from the given geography value */
+  _st_d_within?: Maybe<St_D_Within_Geography_Input>;
+  /** does the column spatially intersect the given geography value */
+  _st_intersects?: Maybe<Scalars['geography']>;
+};
+
+
+export type Geometry_Cast_Exp = {
+  geography?: Maybe<Geography_Comparison_Exp>;
+};
+
+/** Boolean expression to compare columns of type "geometry". All fields are combined with logical 'AND'. */
+export type Geometry_Comparison_Exp = {
+  _cast?: Maybe<Geometry_Cast_Exp>;
+  _eq?: Maybe<Scalars['geometry']>;
+  _gt?: Maybe<Scalars['geometry']>;
+  _gte?: Maybe<Scalars['geometry']>;
+  _in?: Maybe<Array<Scalars['geometry']>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _lt?: Maybe<Scalars['geometry']>;
+  _lte?: Maybe<Scalars['geometry']>;
+  _neq?: Maybe<Scalars['geometry']>;
+  _nin?: Maybe<Array<Scalars['geometry']>>;
+  /** is the column within a given 3D distance from the given geometry value */
+  _st_3d_d_within?: Maybe<St_D_Within_Input>;
+  /** does the column spatially intersect the given geometry value in 3D */
+  _st_3d_intersects?: Maybe<Scalars['geometry']>;
+  /** does the column contain the given geometry value */
+  _st_contains?: Maybe<Scalars['geometry']>;
+  /** does the column cross the given geometry value */
+  _st_crosses?: Maybe<Scalars['geometry']>;
+  /** is the column within a given distance from the given geometry value */
+  _st_d_within?: Maybe<St_D_Within_Input>;
+  /** is the column equal to given geometry value (directionality is ignored) */
+  _st_equals?: Maybe<Scalars['geometry']>;
+  /** does the column spatially intersect the given geometry value */
+  _st_intersects?: Maybe<Scalars['geometry']>;
+  /** does the column 'spatially overlap' (intersect but not completely contain) the given geometry value */
+  _st_overlaps?: Maybe<Scalars['geometry']>;
+  /** does the column have atleast one point in common with the given geometry value */
+  _st_touches?: Maybe<Scalars['geometry']>;
+  /** is the column contained in the given geometry value */
+  _st_within?: Maybe<Scalars['geometry']>;
+};
+
 /** columns and relationships of "note" */
 export type Note = {
   __typename?: 'note';
   content: Scalars['String'];
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  location: Scalars['point'];
-  /** An object relationship */
-  user: User;
+  location: Scalars['geography'];
   user_id: Scalars['String'];
 };
 
@@ -72,8 +133,7 @@ export type Note_Bool_Exp = {
   content?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
-  location?: Maybe<Point_Comparison_Exp>;
-  user?: Maybe<User_Bool_Exp>;
+  location?: Maybe<Geography_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -83,7 +143,6 @@ export type Note_Order_By = {
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   location?: Maybe<Order_By>;
-  user?: Maybe<User_Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -116,20 +175,6 @@ export enum Order_By {
   /** in descending order, nulls last */
   DescNullsLast = 'desc_nulls_last'
 }
-
-
-/** Boolean expression to compare columns of type "point". All fields are combined with logical 'AND'. */
-export type Point_Comparison_Exp = {
-  _eq?: Maybe<Scalars['point']>;
-  _gt?: Maybe<Scalars['point']>;
-  _gte?: Maybe<Scalars['point']>;
-  _in?: Maybe<Array<Scalars['point']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['point']>;
-  _lte?: Maybe<Scalars['point']>;
-  _neq?: Maybe<Scalars['point']>;
-  _nin?: Maybe<Array<Scalars['point']>>;
-};
 
 export type Query_Root = {
   __typename?: 'query_root';
@@ -169,6 +214,17 @@ export type Query_RootUserArgs = {
 
 export type Query_RootUser_By_PkArgs = {
   id: Scalars['String'];
+};
+
+export type St_D_Within_Geography_Input = {
+  distance: Scalars['Float'];
+  from: Scalars['geography'];
+  use_spheroid?: Maybe<Scalars['Boolean']>;
+};
+
+export type St_D_Within_Input = {
+  distance: Scalars['Float'];
+  from: Scalars['geometry'];
 };
 
 export type Subscription_Root = {
@@ -279,24 +335,30 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['uuid']>>;
 };
 
-export type NotesQueryVariables = Exact<{ [key: string]: never; }>;
+export type NotesQueryVariables = Exact<{
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+  distance?: Scalars['Float'];
+}>;
 
 
 export type NotesQuery = (
   { __typename?: 'query_root' }
   & { notes: Array<(
     { __typename?: 'note' }
-    & Pick<Note, 'id' | 'location' | 'content'>
+    & Pick<Note, 'id' | 'content' | 'location'>
   )> }
 );
 
 
 export const NotesDocument = gql`
-    query Notes {
-  notes: note {
+    query Notes($latitude: Float!, $longitude: Float!, $distance: Float! = 100) {
+  notes: note(
+    where: {location: {_st_d_within: {distance: $distance, from: {type: "Point", coordinates: [$longitude, $latitude]}}}}
+  ) {
     id
-    location
     content
+    location
   }
 }
     `;
@@ -313,10 +375,13 @@ export const NotesDocument = gql`
  * @example
  * const { data, loading, error } = useNotesQuery({
  *   variables: {
+ *      latitude: // value for 'latitude'
+ *      longitude: // value for 'longitude'
+ *      distance: // value for 'distance'
  *   },
  * });
  */
-export function useNotesQuery(baseOptions?: Apollo.QueryHookOptions<NotesQuery, NotesQueryVariables>) {
+export function useNotesQuery(baseOptions: Apollo.QueryHookOptions<NotesQuery, NotesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<NotesQuery, NotesQueryVariables>(NotesDocument, options);
       }
