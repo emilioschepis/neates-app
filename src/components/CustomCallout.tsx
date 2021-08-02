@@ -1,6 +1,5 @@
-import dayjs from "dayjs";
-import React, { useMemo } from "react";
-import { Dimensions, Text, View, StyleSheet } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 import { NotesQuery } from "../graphql/generated";
 
@@ -9,38 +8,29 @@ type CustomCalloutProps = {
 };
 
 const CustomCallout = ({ note }: CustomCalloutProps) => {
-  const createdAt = useMemo(
-    () => dayjs(note.createdAt).format("LLL"),
-    [note.createdAt]
-  );
-
   return (
     <View style={styles.container}>
-      <Text numberOfLines={2}>{note.content}</Text>
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoStandardText}>
-          Created by
-          <Text style={styles.infoPrimaryText}> {note.user.username} </Text>
-          on
-          <Text style={styles.infoPrimaryText}> {createdAt}</Text>
-        </Text>
-      </View>
+      <Text style={styles.content} numberOfLines={1}>
+        {note.content}
+      </Text>
+      <Text style={styles.view}>View</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get("screen").width,
-  },
-  infoContainer: {
+    width: 250,
     flexDirection: "row",
-    marginTop: 4,
+    alignItems: "center",
   },
-  infoStandardText: {
-    fontSize: 12,
+  content: {
+    flex: 1,
+    marginRight: 4,
   },
-  infoPrimaryText: {
+  view: {
+    textTransform: "uppercase",
+    color: "#007AFF",
     fontWeight: "bold",
   },
 });

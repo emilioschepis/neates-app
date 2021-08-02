@@ -12,6 +12,13 @@ query Notes($latitude: Float!, $longitude: Float!, $distance: Float! = 100) {
     id
     content
     location
+  }
+}
+
+query Note($id: uuid!) {
+  note: note_by_pk(id: $id) {
+    id
+    content
     createdAt: created_at
     user {
       username

@@ -3,7 +3,11 @@ import React from "react";
 
 import MapScreen from "../screens/MapScreen";
 
-const Stack = createStackNavigator();
+export type MapStackParamList = {
+  Map: undefined;
+};
+
+const Stack = createStackNavigator<MapStackParamList>();
 
 const MapStack = () => {
   return (

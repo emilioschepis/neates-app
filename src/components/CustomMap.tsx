@@ -13,10 +13,15 @@ import CustomMarker from "./CustomMarker";
 
 type CustomMapProps = {
   notes: NotesQuery["notes"];
+  onSelectNote: (noteId: string) => void;
   onUserLocationChange: (location: Location) => void;
 };
 
-const CustomMap = ({ notes, onUserLocationChange }: CustomMapProps) => {
+const CustomMap = ({
+  notes,
+  onSelectNote,
+  onUserLocationChange,
+}: CustomMapProps) => {
   const handleRegionChangeComplete = useCallback(
     (region: Region) => {
       const location = new Location(region.latitude, region.longitude);
@@ -43,6 +48,7 @@ const CustomMap = ({ notes, onUserLocationChange }: CustomMapProps) => {
               latitude: note.location.coordinates[1],
               longitude: note.location.coordinates[0],
             }}
+            onCalloutPress={() => onSelectNote(note.id)}
           >
             <CustomMarker />
             <Callout>

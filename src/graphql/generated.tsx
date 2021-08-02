@@ -351,6 +351,19 @@ export type NotesQuery = (
   & { notes: Array<(
     { __typename?: 'note' }
     & Pick<Note, 'id' | 'content' | 'location'>
+  )> }
+);
+
+export type NoteQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type NoteQuery = (
+  { __typename?: 'query_root' }
+  & { note?: Maybe<(
+    { __typename?: 'note' }
+    & Pick<Note, 'id' | 'content'>
     & { createdAt: Note['created_at'] }
     & { user: (
       { __typename?: 'user' }
@@ -368,10 +381,6 @@ export const NotesDocument = gql`
     id
     content
     location
-    createdAt: created_at
-    user {
-      username
-    }
   }
 }
     `;
@@ -405,3 +414,43 @@ export function useNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Note
 export type NotesQueryHookResult = ReturnType<typeof useNotesQuery>;
 export type NotesLazyQueryHookResult = ReturnType<typeof useNotesLazyQuery>;
 export type NotesQueryResult = Apollo.QueryResult<NotesQuery, NotesQueryVariables>;
+export const NoteDocument = gql`
+    query Note($id: uuid!) {
+  note: note_by_pk(id: $id) {
+    id
+    content
+    createdAt: created_at
+    user {
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useNoteQuery__
+ *
+ * To run a query within a React component, call `useNoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNoteQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useNoteQuery(baseOptions: Apollo.QueryHookOptions<NoteQuery, NoteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NoteQuery, NoteQueryVariables>(NoteDocument, options);
+      }
+export function useNoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NoteQuery, NoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NoteQuery, NoteQueryVariables>(NoteDocument, options);
+        }
+export type NoteQueryHookResult = ReturnType<typeof useNoteQuery>;
+export type NoteLazyQueryHookResult = ReturnType<typeof useNoteLazyQuery>;
+export type NoteQueryResult = Apollo.QueryResult<NoteQuery, NoteQueryVariables>;
