@@ -4,9 +4,7 @@ import firebase from "../firebase/firebase";
 import User from "../models/user";
 import { waitForClaims } from "../utils/authUtils";
 
-type State =
-  | { loading: true; user: null; isAnonymous: null }
-  | { loading: false; user: User; isAnonymous: boolean };
+type State = { loading: true; user: null; isAnonymous: null } | { loading: false; user: User; isAnonymous: boolean };
 type Action = { type: "setAuthenticated"; user: User };
 
 const AuthContext = createContext<State>({

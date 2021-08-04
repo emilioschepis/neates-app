@@ -1,11 +1,7 @@
 import dayjs from "dayjs";
 import React, { useMemo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 import { NoteQuery } from "../graphql/generated";
 
@@ -18,10 +14,7 @@ const NoteView = ({ note }: NoteViewProps) => {
   const animatedFront = useAnimatedStyle(() => {
     return {
       opacity: openAnimation.value >= 1.5 ? 1 : 0,
-      transform: [
-        { perspective: openAnimation.value * 180 },
-        { rotateY: `${openAnimation.value * 180}deg` },
-      ],
+      transform: [{ perspective: openAnimation.value * 180 }, { rotateY: `${openAnimation.value * 180}deg` }],
     };
   });
 
@@ -35,10 +28,7 @@ const NoteView = ({ note }: NoteViewProps) => {
     };
   });
 
-  const createdAt = useMemo(
-    () => dayjs(note?.createdAt).format("LLL"),
-    [note?.createdAt]
-  );
+  const createdAt = useMemo(() => dayjs(note?.createdAt).format("LLL"), [note?.createdAt]);
 
   return (
     <View style={styles.container}>
@@ -55,8 +45,7 @@ const NoteView = ({ note }: NoteViewProps) => {
           </Animated.View>
           <Animated.View style={[animatedBack, styles.note, styles.noteBack]}>
             <Text numberOfLines={1} style={styles.noteInfoText}>
-              Created by{" "}
-              <Text style={{ fontWeight: "bold" }}>{note?.user.username}</Text>,
+              Created by <Text style={{ fontWeight: "bold" }}>{note?.user.username}</Text>,
             </Text>
             <Text numberOfLines={2} style={styles.noteInfoText}>
               {createdAt}

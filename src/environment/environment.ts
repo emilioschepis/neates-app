@@ -31,6 +31,4 @@ export const ProdEnvironment: Environment = {
   },
 };
 
-export const CurrentEnvironment: Environment = __DEV__
-  ? LocalEnvironment
-  : ProdEnvironment;
+export const CurrentEnvironment: Environment = __DEV__ ? LocalEnvironment : ProdEnvironment;

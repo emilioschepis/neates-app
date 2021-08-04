@@ -3,10 +3,7 @@ import { SupportedAlgorithms } from "expo-jwt/dist/types/algorithms";
 
 import firebase from "../firebase/firebase";
 
-export async function waitForClaims(
-  user: firebase.User,
-  { maxRetries = 5 } = {}
-) {
+export async function waitForClaims(user: firebase.User, { maxRetries = 5 } = {}) {
   const customClaimsKey = "https://hasura.io/jwt/claims";
 
   if (!user) {
@@ -26,10 +23,7 @@ export async function waitForClaims(
       throw new Error("Received invalid token.");
     }
 
-    if (
-      decoded[customClaimsKey] &&
-      decoded[customClaimsKey]["x-hasura-user-id"] === user.uid
-    ) {
+    if (decoded[customClaimsKey] && decoded[customClaimsKey]["x-hasura-user-id"] === user.uid) {
       claimsFound = true;
     } else if (currentRetry < maxRetries) {
       currentRetry += 1;
@@ -65,11 +59,9 @@ export async function getCurrentToken(): Promise<string | null> {
     // Locally sign the user token to make it compatible with Hasura's token validation
     const decoded = jwt.decode(currentToken, "");
 
-    const signedToken = jwt.encode(
-      decoded,
-      "local-only-hs256-key-00000000000",
-      { algorithm: SupportedAlgorithms.HS256 }
-    );
+    const signedToken = jwt.encode(decoded, "local-only-hs256-key-00000000000", {
+      algorithm: SupportedAlgorithms.HS256,
+    });
 
     return signedToken;
   }

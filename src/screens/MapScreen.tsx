@@ -28,20 +28,13 @@ const MapScreen = () => {
     [location]
   );
 
-  const handleSelectNote = useCallback(
-    (noteId: string) => setSelectedNote(noteId),
-    []
-  );
+  const handleSelectNote = useCallback((noteId: string) => setSelectedNote(noteId), []);
 
   const clearSelectedNote = useCallback(() => setSelectedNote(null), []);
 
   return (
     <View style={styles.container}>
-      <CustomMap
-        notes={notes}
-        onSelectNote={handleSelectNote}
-        onUserLocationChange={handleUserLocationChange}
-      />
+      <CustomMap notes={notes} onSelectNote={handleSelectNote} onUserLocationChange={handleUserLocationChange} />
       <NoteModal noteId={selectedNote} onClose={clearSelectedNote} />
     </View>
   );

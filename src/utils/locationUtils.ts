@@ -10,10 +10,7 @@ import Location from "../models/location";
  * @param location2 - The second location
  * @returns the distance in meters between the locations
  */
-export function calculateDistance(
-  location1: Location,
-  location2: Location
-): number {
+export function calculateDistance(location1: Location, location2: Location): number {
   const R = 6371e3; // Earth's radius
   const lat1 = (location1.latitude * Math.PI) / 180;
   const lat2 = (location2.latitude * Math.PI) / 180;

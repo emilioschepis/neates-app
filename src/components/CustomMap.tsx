@@ -1,10 +1,6 @@
 import React, { useCallback } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import MapView, {
-  Callout,
-  Marker as MarkerView,
-  Region,
-} from "react-native-maps";
+import MapView, { Callout, Marker as MarkerView, Region } from "react-native-maps";
 
 import { NotesQuery } from "../graphql/generated";
 import Location from "../models/location";
@@ -17,11 +13,7 @@ type CustomMapProps = {
   onUserLocationChange: (location: Location) => void;
 };
 
-const CustomMap = ({
-  notes,
-  onSelectNote,
-  onUserLocationChange,
-}: CustomMapProps) => {
+const CustomMap = ({ notes, onSelectNote, onUserLocationChange }: CustomMapProps) => {
   const handleRegionChangeComplete = useCallback(
     (region: Region) => {
       const location = new Location(region.latitude, region.longitude);
