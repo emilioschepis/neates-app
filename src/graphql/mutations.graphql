@@ -1,0 +1,5 @@
+mutation CreateNote($content: String!, $latitude: Float!, $longitude: Float!) {
+  create_note(content: $content, latitude: $latitude, longitude: $longitude) {
+    note_id
+  }
+}

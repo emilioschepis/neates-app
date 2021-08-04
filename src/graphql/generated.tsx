@@ -20,6 +20,13 @@ export type Scalars = {
 };
 
 
+export type CreateNoteOutput = {
+  __typename?: 'CreateNoteOutput';
+  /** An object relationship */
+  note: Note;
+  note_id: Scalars['uuid'];
+};
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: Maybe<Scalars['String']>;
@@ -113,6 +120,20 @@ export type Geometry_Comparison_Exp = {
   _st_touches?: Maybe<Scalars['geometry']>;
   /** is the column contained in the given geometry value */
   _st_within?: Maybe<Scalars['geometry']>;
+};
+
+/** mutation root */
+export type Mutation_Root = {
+  __typename?: 'mutation_root';
+  create_note: CreateNoteOutput;
+};
+
+
+/** mutation root */
+export type Mutation_RootCreate_NoteArgs = {
+  content: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
 };
 
 /** columns and relationships of "note" */
@@ -339,6 +360,21 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['uuid']>>;
 };
 
+export type CreateNoteMutationVariables = Exact<{
+  content: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+}>;
+
+
+export type CreateNoteMutation = (
+  { __typename?: 'mutation_root' }
+  & { create_note: (
+    { __typename?: 'CreateNoteOutput' }
+    & Pick<CreateNoteOutput, 'note_id'>
+  ) }
+);
+
 export type NotesQueryVariables = Exact<{
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
@@ -373,6 +409,41 @@ export type NoteQuery = (
 );
 
 
+export const CreateNoteDocument = gql`
+    mutation CreateNote($content: String!, $latitude: Float!, $longitude: Float!) {
+  create_note(content: $content, latitude: $latitude, longitude: $longitude) {
+    note_id
+  }
+}
+    `;
+export type CreateNoteMutationFn = Apollo.MutationFunction<CreateNoteMutation, CreateNoteMutationVariables>;
+
+/**
+ * __useCreateNoteMutation__
+ *
+ * To run a mutation, you first call `useCreateNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNoteMutation, { data, loading, error }] = useCreateNoteMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      latitude: // value for 'latitude'
+ *      longitude: // value for 'longitude'
+ *   },
+ * });
+ */
+export function useCreateNoteMutation(baseOptions?: Apollo.MutationHookOptions<CreateNoteMutation, CreateNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNoteMutation, CreateNoteMutationVariables>(CreateNoteDocument, options);
+      }
+export type CreateNoteMutationHookResult = ReturnType<typeof useCreateNoteMutation>;
+export type CreateNoteMutationResult = Apollo.MutationResult<CreateNoteMutation>;
+export type CreateNoteMutationOptions = Apollo.BaseMutationOptions<CreateNoteMutation, CreateNoteMutationVariables>;
 export const NotesDocument = gql`
     query Notes($latitude: Float!, $longitude: Float!, $distance: Float! = 100) {
   notes: note(

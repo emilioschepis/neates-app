@@ -1,8 +1,9 @@
 import { ApolloError } from "@apollo/client";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { NotesQuery, useNotesQuery } from "../graphql/generated";
 import Location from "../models/location";
+import { LocationConstants } from "../utils/constants";
 
 type UseNotesResult = {
   loading: boolean;
@@ -13,28 +14,43 @@ type UseNotesResult = {
 /**
  * Returns the list of notes around the user's location
  *
- * @param location - The location of the user
+ * @param currentLocation - The current location of the user
  */
-export default function useNotes(location: Location | null): UseNotesResult {
-  const notesRef = useRef<NotesQuery["notes"]>([]);
+export default function useNotes(currentLocation: Location | null): UseNotesResult {
+  const [queryLocation, setQueryLocation] = useState<Location | null>(currentLocation);
   const { loading, error, data, previousData } = useNotesQuery({
     variables: {
-      latitude: location?.latitude ?? 0,
-      longitude: location?.longitude ?? 0,
+      latitude: queryLocation?.latitude ?? 0,
+      longitude: queryLocation?.longitude ?? 0,
     },
   });
 
   const notes: NotesQuery["notes"] = useMemo(() => {
-    if (!location) return [];
+    if (!queryLocation) return [];
 
     if (loading || !data) {
-      return notesRef.current;
+      return previousData?.notes ?? [];
     }
 
-    notesRef.current = data.notes ?? [];
-
-    return notesRef.current;
+    return data.notes ?? [];
   }, [data]);
+
+  useEffect(() => {
+    if (!currentLocation) {
+      return;
+    }
+
+    if (!queryLocation) {
+      setQueryLocation(currentLocation);
+      return;
+    }
+
+    const distance = currentLocation.distance(queryLocation);
+
+    if (distance >= LocationConstants.minimumRefetchDistance) {
+      setQueryLocation(currentLocation);
+    }
+  }, [currentLocation, queryLocation]);
 
   return { loading: loading && !previousData, notes, error };
 }
