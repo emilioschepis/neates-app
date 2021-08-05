@@ -309,8 +309,6 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "user" */
 export type User = {
   __typename?: 'user';
-  created_at: Scalars['timestamptz'];
-  email: Scalars['String'];
   id: Scalars['String'];
   username: Scalars['String'];
 };
@@ -320,26 +318,18 @@ export type User_Bool_Exp = {
   _and?: Maybe<Array<User_Bool_Exp>>;
   _not?: Maybe<User_Bool_Exp>;
   _or?: Maybe<Array<User_Bool_Exp>>;
-  created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  email?: Maybe<String_Comparison_Exp>;
   id?: Maybe<String_Comparison_Exp>;
   username?: Maybe<String_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "user". */
 export type User_Order_By = {
-  created_at?: Maybe<Order_By>;
-  email?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   username?: Maybe<Order_By>;
 };
 
 /** select columns of table "user" */
 export enum User_Select_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Email = 'email',
   /** column name */
   Id = 'id',
   /** column name */
