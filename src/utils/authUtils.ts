@@ -1,7 +1,17 @@
+import { Buffer } from "buffer";
 import jwt from "expo-jwt";
 import { SupportedAlgorithms } from "expo-jwt/dist/types/algorithms";
 
 import firebase from "../firebase/firebase";
+
+// https://stackoverflow.com/questions/56546048/decoding-jwt-token-without-key-in-an-react-native-expo-app
+function decodeToken(token: string): Record<string, any> {
+  const parts = token
+    .split(".")
+    .map((part) => Buffer.from(part.replace(/-/g, "+").replace(/_/g, "/"), "base64").toString());
+
+  return JSON.parse(parts[1]);
+}
 
 export async function waitForClaims(user: firebase.User, { maxRetries = 5 } = {}) {
   const customClaimsKey = "https://hasura.io/jwt/claims";
@@ -17,7 +27,7 @@ export async function waitForClaims(user: firebase.User, { maxRetries = 5 } = {}
     await new Promise((resolve) => setTimeout(resolve, currentRetry * 1000));
 
     const token = await user.getIdToken(true);
-    const decoded = jwt.decode(token, "");
+    const decoded = decodeToken(token);
 
     if (!decoded || typeof decoded === "string") {
       throw new Error("Received invalid token.");
@@ -57,7 +67,7 @@ export async function getCurrentToken(): Promise<string | null> {
 
   if (__DEV__) {
     // Locally sign the user token to make it compatible with Hasura's token validation
-    const decoded = jwt.decode(currentToken, "");
+    const decoded = decodeToken(currentToken);
 
     const signedToken = jwt.encode(decoded, "local-only-hs256-key-00000000000", {
       algorithm: SupportedAlgorithms.HS256,
