@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 import CustomMap from "../components/CustomMap";
 import NoteModal from "../components/NoteModal";
+import { useAuth } from "../context/AuthContext";
 import useNotes from "../hooks/useNotes";
 import Location from "../models/location";
 import { MapStackParamList } from "../navigation/MapStack";
@@ -12,6 +13,7 @@ import { MapStackParamList } from "../navigation/MapStack";
 type MapScreenNavigationProp = StackNavigationProp<MapStackParamList, "Map">;
 
 const MapScreen = () => {
+  const { isAnonymous } = useAuth();
   const navigation = useNavigation<MapScreenNavigationProp>();
   const [location, setLocation] = useState<Location | null>(null);
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
@@ -24,11 +26,13 @@ const MapScreen = () => {
     <View style={styles.container}>
       <CustomMap notes={notes} onSelectNote={handleSelectNote} onUserLocationChange={setLocation} />
       <NoteModal noteId={selectedNote} onClose={clearSelectedNote} />
-      <View style={styles.fabContainer}>
-        <Pressable onPress={() => location && navigation.navigate("CreateNote", { location })}>
-          <View style={styles.fab} />
-        </Pressable>
-      </View>
+      {!isAnonymous && (
+        <View style={styles.fabContainer}>
+          <Pressable onPress={() => location && navigation.navigate("CreateNote", { location })}>
+            <View style={styles.fab} />
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 };
