@@ -1,9 +1,9 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import CreateNoteForm from "../components/CreateNoteForm";
+import CreateNoteForm, { CreateNoteFormData } from "../components/CreateNoteForm";
 import { NotesDocument, useCreateNoteMutation } from "../graphql/generated";
 import { MapStackParamList } from "../navigation/MapStack";
 
@@ -18,9 +18,9 @@ const CreateNoteScreen = () => {
   const [createNote] = useCreateNoteMutation();
 
   const handleSubmit = useCallback(
-    async (content: string) => {
+    async (fields: CreateNoteFormData) => {
       await createNote({
-        variables: { content, latitude: location.latitude, longitude: location.longitude },
+        variables: { content: fields.content, latitude: location.latitude, longitude: location.longitude },
         refetchQueries: [NotesDocument],
         awaitRefetchQueries: true,
       });
@@ -38,7 +38,9 @@ const CreateNoteScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
 });
 
 export default CreateNoteScreen;

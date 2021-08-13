@@ -4,10 +4,6 @@ import { Controller, useForm } from "react-hook-form";
 import { TextInput, View, StyleSheet, Button, Text } from "react-native";
 import * as yup from "yup";
 
-type SignUpFormProps = {
-  onSubmit: (fields: SignUpFormData) => Promise<void>;
-};
-
 export type SignUpFormData = {
   email: string;
   password: string;
@@ -17,6 +13,10 @@ const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().min(6),
 });
+
+type SignUpFormProps = {
+  onSubmit: (fields: SignUpFormData) => Promise<void>;
+};
 
 const SignUpForm = ({ onSubmit }: SignUpFormProps) => {
   const {
