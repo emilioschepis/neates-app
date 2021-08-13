@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import CreateNoteForm, { CreateNoteFormData } from "../components/CreateNoteForm";
-import { NotesDocument, useCreateNoteMutation } from "../graphql/generated";
+import { useCreateNoteMutation } from "../graphql/generated";
 import { MapStackParamList } from "../navigation/MapStack";
 
 type CreateNoteScreenNavigationProp = StackNavigationProp<MapStackParamList, "CreateNote">;
@@ -21,7 +21,7 @@ const CreateNoteScreen = () => {
     async (fields: CreateNoteFormData) => {
       await createNote({
         variables: { content: fields.content, latitude: location.latitude, longitude: location.longitude },
-        refetchQueries: [NotesDocument],
+        refetchQueries: ["Notes"],
         awaitRefetchQueries: true,
       });
 
