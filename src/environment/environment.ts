@@ -1,13 +1,3 @@
-import {
-  LOCAL_FIREBASE_API_KEY,
-  LOCAL_FIREBASE_AUTH_DOMAIN,
-  LOCAL_FIREBASE_PROJECT_ID,
-  LOCAL_GRAPHQL_ENDPOINT,
-  PROD_FIREBASE_API_KEY,
-  PROD_FIREBASE_AUTH_DOMAIN,
-  PROD_FIREBASE_PROJECT_ID,
-  PROD_GRAPHQL_ENDPOINT,
-} from "@env";
 import * as Updates from "expo-updates";
 
 type Environment = {
@@ -23,23 +13,23 @@ type Environment = {
 
 export const LocalEnvironment: Environment = {
   firebase: {
-    apiKey: LOCAL_FIREBASE_API_KEY,
-    authDomain: LOCAL_FIREBASE_AUTH_DOMAIN,
-    projectId: LOCAL_FIREBASE_PROJECT_ID,
+    apiKey: "AIzaSyBD5QhXg-O3lj11l3zLsDKl_e6lVINLlwM",
+    authDomain: "geonotes-prod.firebaseapp.com",
+    projectId: "geonotes-prod",
   },
   graphql: {
-    endpoint: LOCAL_GRAPHQL_ENDPOINT,
+    endpoint: "http://localhost:8080",
   },
 };
 
 export const ProdEnvironment: Environment = {
   firebase: {
-    apiKey: PROD_FIREBASE_API_KEY,
-    authDomain: PROD_FIREBASE_AUTH_DOMAIN,
-    projectId: PROD_FIREBASE_PROJECT_ID,
+    apiKey: "AIzaSyBD5QhXg-O3lj11l3zLsDKl_e6lVINLlwM",
+    authDomain: "geonotes-prod.firebaseapp.com",
+    projectId: "geonotes-prod",
   },
   graphql: {
-    endpoint: PROD_GRAPHQL_ENDPOINT,
+    endpoint: "https://geonotes-prod.herokuapp.com",
   },
 };
 
