@@ -43,9 +43,7 @@ const CreateNoteForm = ({ onSubmit }: CreateNoteFormProps) => {
         )}
       />
       {errors.content && <Text>{errors.content.message}</Text>}
-      <Button title="Submit" disabled={isSubmitting} onPress={handleSubmit(onSubmit)}>
-        Create a new note here
-      </Button>
+      <Button title="Create a new note here" disabled={isSubmitting} onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };
