@@ -17,18 +17,18 @@ const NoteModal = ({ noteId, onClose }: NoteModalProps) => {
   });
 
   return (
-    <View style={styles.container}>
-      <Modal isVisible={!!noteId && data?.note?.id === noteId} onBackdropPress={onClose}>
+    <Modal isVisible={!!noteId && data?.note?.id === noteId} onBackdropPress={onClose}>
+      <View style={styles.container}>
         <NoteView note={data?.note} />
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
