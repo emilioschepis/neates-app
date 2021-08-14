@@ -1,38 +1,33 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import MapView, { Callout, Marker as MarkerView, Region } from "react-native-maps";
+import MapView, { Callout, Marker as MarkerView } from "react-native-maps";
 
+import { useLocation } from "../context/LocationContext";
 import { NotesQuery } from "../graphql/generated";
-import Location from "../models/location";
 import CustomCallout from "./CustomCallout";
 import CustomMarker from "./CustomMarker";
 
 type CustomMapProps = {
   notes: NotesQuery["notes"];
   onSelectNote: (noteId: string) => void;
-  onUserLocationChange: (location: Location) => void;
 };
 
-const CustomMap = ({ notes, onSelectNote, onUserLocationChange }: CustomMapProps) => {
-  const handleRegionChangeComplete = useCallback(
-    (region: Region) => {
-      const location = new Location(region.latitude, region.longitude);
-      onUserLocationChange(location);
-    },
-    [onUserLocationChange]
-  );
+const CustomMap = ({ notes, onSelectNote }: CustomMapProps) => {
+  const mapRef = useRef<MapView | null>(null);
+  const { location } = useLocation();
+
+  const handleMapReady = useCallback(() => {
+    mapRef.current?.animateToRegion({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      latitudeDelta: 0.002,
+      longitudeDelta: 0.002,
+    });
+  }, [location]);
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        showsUserLocation
-        followsUserLocation
-        scrollEnabled={false}
-        zoomEnabled={false}
-        pitchEnabled={false}
-        onRegionChangeComplete={handleRegionChangeComplete}
-      >
+      <MapView ref={(map) => (mapRef.current = map)} style={styles.map} showsUserLocation onMapReady={handleMapReady}>
         {notes.map((note) => (
           <MarkerView
             key={note.id}

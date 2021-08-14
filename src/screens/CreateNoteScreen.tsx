@@ -1,21 +1,19 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback } from "react";
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 import CreateNoteForm, { CreateNoteFormData } from "../components/CreateNoteForm";
 import KeyboardAvoidingView from "../components/KeyboardAvoidingView";
+import { useLocation } from "../context/LocationContext";
 import { useCreateNoteMutation } from "../graphql/generated";
 import { MapStackParamList } from "../navigation/MapStack";
 
 type CreateNoteScreenNavigationProp = StackNavigationProp<MapStackParamList, "CreateNote">;
-type CreateNoteScreenRouteProp = RouteProp<MapStackParamList, "CreateNote">;
 
 const CreateNoteScreen = () => {
+  const { loading: locationLoading, granted, location } = useLocation();
   const navigation = useNavigation<CreateNoteScreenNavigationProp>();
-  const {
-    params: { location },
-  } = useRoute<CreateNoteScreenRouteProp>();
   const [createNote] = useCreateNoteMutation();
 
   const handleSubmit = useCallback(
@@ -30,6 +28,22 @@ const CreateNoteScreen = () => {
     },
     [createNote, location]
   );
+
+  if (locationLoading) {
+    return (
+      <View style={StyleSheet.absoluteFill}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (!granted) {
+    return (
+      <View style={styles.container}>
+        <Text>Sorry, you can't create notes without allowing access to your location.</Text>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container}>

@@ -1,13 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
-import Location from "../models/location";
 import CreateNoteScreen from "../screens/CreateNoteScreen";
 import MapScreen from "../screens/MapScreen";
 
 export type MapStackParamList = {
   Map: undefined;
-  CreateNote: { location: Location };
+  CreateNote: undefined;
 };
 
 const Stack = createStackNavigator<MapStackParamList>();

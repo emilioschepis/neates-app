@@ -7,7 +7,6 @@ import CustomMap from "../components/CustomMap";
 import NoteModal from "../components/NoteModal";
 import { useAuth } from "../context/AuthContext";
 import useNotes from "../hooks/useNotes";
-import Location from "../models/location";
 import { MapStackParamList } from "../navigation/MapStack";
 
 type MapScreenNavigationProp = StackNavigationProp<MapStackParamList, "Map">;
@@ -15,20 +14,19 @@ type MapScreenNavigationProp = StackNavigationProp<MapStackParamList, "Map">;
 const MapScreen = () => {
   const { isAnonymous } = useAuth();
   const navigation = useNavigation<MapScreenNavigationProp>();
-  const [location, setLocation] = useState<Location | null>(null);
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
-  const { notes } = useNotes(location);
+  const { notes } = useNotes();
 
   const handleSelectNote = useCallback((noteId: string) => setSelectedNote(noteId), []);
   const clearSelectedNote = useCallback(() => setSelectedNote(null), []);
 
   return (
     <View style={styles.container}>
-      <CustomMap notes={notes} onSelectNote={handleSelectNote} onUserLocationChange={setLocation} />
+      <CustomMap notes={notes} onSelectNote={handleSelectNote} />
       <NoteModal noteId={selectedNote} onClose={clearSelectedNote} />
       {!isAnonymous && (
         <View style={styles.fabContainer}>
-          <Pressable onPress={() => location && navigation.navigate("CreateNote", { location })}>
+          <Pressable onPress={() => navigation.navigate("CreateNote")}>
             <View style={styles.fab} />
           </Pressable>
         </View>
