@@ -14,7 +14,7 @@ const Stack = createStackNavigator<MapStackParamList>();
 const MapStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Map" component={MapScreen} />
+      <Stack.Screen name="Map" component={MapScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CreateNote" component={CreateNoteScreen} />
     </Stack.Navigator>
   );

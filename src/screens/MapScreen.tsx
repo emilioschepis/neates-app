@@ -25,7 +25,7 @@ const MapScreen = () => {
     const buttons: CustomMapButtonProps[] = [];
 
     if (!isAnonymous) {
-      buttons.push({ onClick: () => navigation.navigate("CreateNote") });
+      buttons.push({ icon: "pencil", onClick: () => navigation.navigate("CreateNote") });
     }
 
     return buttons;

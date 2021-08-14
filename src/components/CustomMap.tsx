@@ -47,7 +47,7 @@ const CustomMap = ({ notes, buttons, onSelectNote }: CustomMapProps) => {
         ))}
       </MapView>
       <View style={styles.buttonsContainer}>
-        <CustomMapButton size="small" onClick={resetMapRegion} />
+        <CustomMapButton size="small" icon="locate" onClick={resetMapRegion} />
         {buttons.map((buttonProps, idx) => (
           <CustomMapButton key={idx.toString()} {...buttonProps} style={{ marginTop: 8 }} />
         ))}
