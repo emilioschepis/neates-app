@@ -1,9 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import CreateNoteForm, { CreateNoteFormData } from "../components/CreateNoteForm";
+import KeyboardAvoidingView from "../components/KeyboardAvoidingView";
 import { useCreateNoteMutation } from "../graphql/generated";
 import { MapStackParamList } from "../navigation/MapStack";
 
@@ -31,9 +32,9 @@ const CreateNoteScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <CreateNoteForm onSubmit={handleSubmit} />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
