@@ -4,44 +4,38 @@ import React, { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import KeyboardAvoidingView from "../components/KeyboardAvoidingView";
-import SignUpForm, { SignUpFormData } from "../components/SignUpForm";
+import SignInForm, { SignInFormData } from "../components/SignInForm";
 import firebase from "../firebase/firebase";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 
-type SignUpScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "SignUp">;
+type SignInScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "SignIn">;
 
-const SignUpScreen = () => {
+const SignInScreen = () => {
   const theme = useTheme();
-  const navigation = useNavigation<SignUpScreenNavigationProp>();
+  const navigation = useNavigation<SignInScreenNavigationProp>();
   const [error, setError] = useState<string | null>(null);
 
-  const handleSignUp = useCallback(async (fields: SignUpFormData) => {
+  const handleSignIn = useCallback(async (fields: SignInFormData) => {
     setError(null);
-
     await firebase
       .auth()
-      .createUserWithEmailAndPassword(fields.email, fields.password)
+      .signInWithEmailAndPassword(fields.email, fields.password)
       .catch((error) => setError(error.message));
   }, []);
 
-  const handleSignIn = () => navigation.navigate("SignIn");
+  const handleSignUp = () => navigation.navigate("SignUp");
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.welcomeText}>
-        Welcome to <Text style={{ color: theme.colors.primary }}>Geonotes</Text>
-      </Text>
-      <Text style={styles.promptText}>
-        Sign up now to create your own notes and share them with people around the world.
-      </Text>
-      <SignUpForm error={error} onSubmit={handleSignUp} />
+      <Text style={styles.welcomeText}>Welcome back</Text>
+      <SignInForm error={error} onSubmit={handleSignIn} />
       <View style={styles.signInContainer}>
-        <Text style={styles.signInPromptText}>Already have an account?</Text>
+        <Text style={styles.signUpPromptText}>New to Geonotes?</Text>
         <Pressable
-          onPress={handleSignIn}
-          style={({ pressed }) => [styles.signInButton, { opacity: pressed ? 0.6 : 1.0 }]}
+          onPress={handleSignUp}
+          style={({ pressed }) => [styles.signUpButton, { opacity: pressed ? 0.6 : 1.0 }]}
         >
-          <Text style={[styles.signInText, { color: theme.colors.primary }]}>Sign in instead</Text>
+          <Text style={[styles.signUpText, { color: theme.colors.primary }]}>Sign up now</Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>
@@ -72,15 +66,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  signInPromptText: {
+  signUpPromptText: {
     fontStyle: "italic",
   },
-  signInButton: {
+  signUpButton: {
     marginLeft: 4,
   },
-  signInText: {
+  signUpText: {
     fontWeight: "bold",
   },
 });
 
-export default SignUpScreen;
+export default SignInScreen;

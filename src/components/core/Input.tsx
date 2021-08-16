@@ -1,0 +1,112 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "@react-navigation/native";
+import React, { useState } from "react";
+import {
+  KeyboardTypeOptions,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInputProps,
+  View,
+  ViewStyle,
+  TextInput,
+} from "react-native";
+
+type InputProps = {
+  disabled?: boolean;
+  error?: string;
+  keyboardType?: KeyboardTypeOptions;
+  label: string;
+  multiline?: boolean;
+  placeholder?: string;
+  secureTextEntry?: boolean;
+  textContentType?: TextInputProps["textContentType"];
+  text: string;
+  style?: StyleProp<ViewStyle>;
+  onBlur?: () => void;
+  onChangeText?: (value: string) => void;
+};
+
+const Input = ({
+  disabled = false,
+  error,
+  keyboardType,
+  label,
+  multiline = false,
+  placeholder,
+  secureTextEntry,
+  textContentType,
+  text,
+  style,
+  onBlur,
+  onChangeText,
+}: InputProps) => {
+  const theme = useTheme();
+  const [focus, setFocus] = useState(false);
+
+  return (
+    <View style={[style, styles.container]}>
+      <Text style={styles.labelText}>{label}</Text>
+      <TextInput
+        style={[
+          styles.input,
+          {
+            borderColor: focus ? theme.colors.primary : error ? "red" : "lightgray",
+            backgroundColor: disabled ? "lightgray" : "white",
+          },
+        ]}
+        editable={!disabled}
+        keyboardType={keyboardType}
+        multiline={multiline}
+        placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
+        textContentType={textContentType}
+        value={text}
+        onChangeText={onChangeText}
+        onFocus={() => {
+          setFocus(true);
+        }}
+        onBlur={() => {
+          setFocus(false);
+          onBlur?.();
+        }}
+      />
+      {error ? (
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle" color="red" size={16} />
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      ) : null}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+  },
+  labelText: {
+    fontSize: 12,
+    textTransform: "uppercase",
+    marginBottom: 4,
+    fontWeight: "bold",
+  },
+  input: {
+    height: 44,
+    borderWidth: 2,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+  },
+  errorContainer: {
+    flexDirection: "row",
+    marginTop: 4,
+    alignItems: "center",
+  },
+  errorText: {
+    marginLeft: 4,
+    color: "red",
+    flexShrink: 1,
+  },
+});
+
+export default Input;

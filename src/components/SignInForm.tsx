@@ -8,7 +8,7 @@ import * as yup from "yup";
 import Button from "./core/Button";
 import Input from "./core/Input";
 
-export type SignUpFormData = {
+export type SignInFormData = {
   email: string;
   password: string;
 };
@@ -18,17 +18,17 @@ const schema = yup.object().shape({
   password: yup.string().min(6),
 });
 
-type SignUpFormProps = {
+type SignInFormProps = {
   error: string | null;
-  onSubmit: (fields: SignUpFormData) => Promise<void>;
+  onSubmit: (fields: SignInFormData) => Promise<void>;
 };
 
-const SignUpForm = ({ error, onSubmit }: SignUpFormProps) => {
+const SignInForm = ({ error, onSubmit }: SignInFormProps) => {
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignUpFormData>({
+  } = useForm<SignInFormData>({
     resolver: yupResolver(schema),
   });
 
@@ -60,8 +60,8 @@ const SignUpForm = ({ error, onSubmit }: SignUpFormProps) => {
           <Input
             secureTextEntry
             label="Password"
-            placeholder="Choose a password"
-            textContentType="newPassword"
+            placeholder="Enter your password"
+            textContentType="password"
             text={value}
             onBlur={onBlur}
             onChangeText={onChange}
@@ -79,7 +79,7 @@ const SignUpForm = ({ error, onSubmit }: SignUpFormProps) => {
       ) : null}
 
       <Button loading={isSubmitting} onPress={handleSubmit(onSubmit)}>
-        Sign up
+        Sign in
       </Button>
     </View>
   );
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpForm;
+export default SignInForm;

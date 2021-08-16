@@ -7,11 +7,11 @@ import { useAuth } from "../context/AuthContext";
 import firebase from "../firebase/firebase";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 
-type MapScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "Profile">;
+type ProfileScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "Profile">;
 
 const ProfileScreen = () => {
   const { user } = useAuth();
-  const navigation = useNavigation<MapScreenNavigationProp>();
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
   const handleSignOut = useCallback(() => firebase.auth().signOut(), []);
 
   if (!user) {
