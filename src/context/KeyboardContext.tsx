@@ -30,6 +30,11 @@ export const KeyboardInsetProvider = ({ children }: { children: React.ReactNode 
     const onKeyboardWillShow: KeyboardEventListener = (event) => {
       const inset = event.endCoordinates.screenY - (event.startCoordinates?.screenY ?? 0);
 
+      if (inset === 0) {
+        // The keyboard is already showing, but the focus changed.
+        return;
+      }
+
       dispatch({
         type: "setKeyboardInset",
         payload: {
