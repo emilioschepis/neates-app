@@ -28,3 +28,9 @@ query MyNotes($userId: String!) {
     content
   }
 }
+
+query User($userId: String!) {
+  user: user_by_pk(id: $userId) {
+    username
+  }
+}
