@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 type InputProps = {
+  autoCapitalize?: TextInputProps["autoCapitalize"];
   disabled?: boolean;
   error?: string;
   keyboardType?: KeyboardTypeOptions;
@@ -29,6 +30,7 @@ type InputProps = {
 };
 
 const Input = ({
+  autoCapitalize,
   disabled = false,
   error,
   keyboardType,
@@ -56,8 +58,10 @@ const Input = ({
             borderColor: focus ? theme.colors.primary : error ? "red" : "lightgray",
             backgroundColor: disabled ? "lightgray" : "white",
             paddingTop: multiline ? 16 : undefined,
+            flex: multiline ? 1 : undefined,
           },
         ]}
+        autoCapitalize={autoCapitalize}
         editable={!disabled}
         keyboardType={keyboardType}
         maxLength={maxLength}
@@ -101,7 +105,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   input: {
-    flex: 1,
     minHeight: 44,
     borderWidth: 2,
     borderRadius: 8,

@@ -40,6 +40,7 @@ const SignInForm = ({ error, onSubmit }: SignInFormProps) => {
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            autoCapitalize="none"
             label="Email address"
             placeholder="Enter your email address"
             keyboardType="email-address"
@@ -59,6 +60,7 @@ const SignInForm = ({ error, onSubmit }: SignInFormProps) => {
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
             secureTextEntry
+            autoCapitalize="none"
             label="Password"
             placeholder="Enter your password"
             textContentType="password"
