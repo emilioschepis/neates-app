@@ -1,15 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
+
+import { NoteConstants } from "../utils/constants";
+import Button from "./core/Button";
+import Input from "./core/Input";
 
 export type CreateNoteFormData = {
   content: string;
 };
 
 const schema = yup.object().shape({
-  content: yup.string().required(),
+  content: yup.string().max(NoteConstants.maximumLength).required(),
 });
 
 type CreateNoteFormProps = {
@@ -32,18 +36,22 @@ const CreateNoteForm = ({ onSubmit }: CreateNoteFormProps) => {
         defaultValue=""
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
+          <Input
             style={styles.input}
             multiline
+            label="Note"
             placeholder="Your note's content"
+            maxLength={NoteConstants.maximumLength}
+            text={value}
             onBlur={onBlur}
             onChangeText={onChange}
-            value={value}
+            error={errors.content?.message}
           />
         )}
       />
-      {errors.content && <Text>{errors.content.message}</Text>}
-      <Button title="Create a new note here" disabled={isSubmitting} onPress={handleSubmit(onSubmit)} />
+      <Button loading={isSubmitting} onPress={handleSubmit(onSubmit)}>
+        Create a new note here
+      </Button>
     </View>
   );
 };
@@ -51,14 +59,9 @@ const CreateNoteForm = ({ onSubmit }: CreateNoteFormProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
   },
   input: {
     flex: 1,
-    padding: 8,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 4,
     marginBottom: 8,
   },
 });

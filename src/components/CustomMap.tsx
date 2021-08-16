@@ -59,7 +59,6 @@ const CustomMap = ({ notes, buttons, onSelectNote }: CustomMapProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
   },
   map: {
     width: Dimensions.get("screen").width,

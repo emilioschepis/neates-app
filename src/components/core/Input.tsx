@@ -17,6 +17,7 @@ type InputProps = {
   error?: string;
   keyboardType?: KeyboardTypeOptions;
   label: string;
+  maxLength?: number;
   multiline?: boolean;
   placeholder?: string;
   secureTextEntry?: boolean;
@@ -32,6 +33,7 @@ const Input = ({
   error,
   keyboardType,
   label,
+  maxLength,
   multiline = false,
   placeholder,
   secureTextEntry,
@@ -53,10 +55,12 @@ const Input = ({
           {
             borderColor: focus ? theme.colors.primary : error ? "red" : "lightgray",
             backgroundColor: disabled ? "lightgray" : "white",
+            paddingTop: multiline ? 16 : undefined,
           },
         ]}
         editable={!disabled}
         keyboardType={keyboardType}
+        maxLength={maxLength}
         multiline={multiline}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
@@ -71,6 +75,11 @@ const Input = ({
           onBlur?.();
         }}
       />
+      {maxLength ? (
+        <Text style={styles.lengthText}>
+          {text.length}/{maxLength}
+        </Text>
+      ) : null}
       {error ? (
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" color="red" size={16} />
@@ -92,10 +101,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   input: {
-    height: 44,
+    flex: 1,
+    minHeight: 44,
     borderWidth: 2,
     borderRadius: 8,
-    paddingHorizontal: 16,
+    padding: 16,
   },
   errorContainer: {
     flexDirection: "row",
@@ -106,6 +116,13 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     color: "red",
     flexShrink: 1,
+  },
+  lengthText: {
+    marginTop: 4,
+    width: "100%",
+    textAlign: "right",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 });
 
