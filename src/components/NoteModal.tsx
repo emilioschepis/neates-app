@@ -17,10 +17,8 @@ const NoteModal = ({ noteId, onClose }: NoteModalProps) => {
   });
 
   return (
-    <Modal isVisible={!!noteId && data?.note?.id === noteId} onBackdropPress={onClose}>
-      <View style={styles.container}>
-        <NoteView note={data?.note} />
-      </View>
+    <Modal isVisible={!!noteId && data?.note?.data.id === noteId} onBackdropPress={onClose}>
+      <View style={styles.container}>{data && <NoteView note={data.note.data} />}</View>
     </Modal>
   );
 };

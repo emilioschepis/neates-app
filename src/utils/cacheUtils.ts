@@ -45,6 +45,11 @@ export function updateCacheAfterCreateNote(cache: ApolloCache<CreateNoteMutation
       id: data.create_note.note.id,
       content: data.create_note.note.content,
       createdAt: data.create_note.note.createdAt,
+      views_aggregate: {
+        aggregate: {
+          count: 0,
+        },
+      },
     });
   });
 }

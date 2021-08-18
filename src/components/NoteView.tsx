@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import React, { useMemo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -6,7 +7,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import { NoteQuery } from "../graphql/generated";
 
 type NoteViewProps = {
-  note: NoteQuery["note"];
+  note: NoteQuery["note"]["data"];
 };
 
 const NoteView = ({ note }: NoteViewProps) => {
@@ -44,12 +45,20 @@ const NoteView = ({ note }: NoteViewProps) => {
             <Text style={styles.noteContentText}>{note?.content}</Text>
           </Animated.View>
           <Animated.View style={[animatedBack, styles.note, styles.noteBack]}>
-            <Text numberOfLines={1} style={styles.noteInfoText}>
-              Created by <Text style={{ fontWeight: "bold" }}>{note?.user.username}</Text>,
-            </Text>
-            <Text numberOfLines={2} style={styles.noteInfoText}>
-              {createdAt}
-            </Text>
+            <View style={styles.viewsContainer}>
+              <Ionicons name="eye" size={18} color="black" />
+              <Text numberOfLines={1} style={styles.viewsText}>
+                Viewed by {note?.views_aggregate.aggregate?.count ?? 0} people
+              </Text>
+            </View>
+            <View>
+              <Text numberOfLines={1} style={styles.noteInfoText}>
+                Created by <Text style={{ fontWeight: "bold" }}>{note?.user.username}</Text>,
+              </Text>
+              <Text numberOfLines={2} style={styles.noteInfoText}>
+                {createdAt}
+              </Text>
+            </View>
           </Animated.View>
         </View>
       </Pressable>
@@ -82,13 +91,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noteBack: {
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
   },
   noteContentText: {
     fontSize: 16,
     fontStyle: "italic",
   },
   noteInfoText: {
+    fontSize: 16,
+  },
+  viewsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  viewsText: {
+    marginLeft: 4,
     fontSize: 16,
   },
 });

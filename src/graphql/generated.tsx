@@ -27,6 +27,13 @@ export type CreateNoteOutput = {
   note_id: Scalars['uuid'];
 };
 
+export type GetNoteOutput = {
+  __typename?: 'GetNoteOutput';
+  /** An object relationship */
+  note: Note;
+  note_id: Scalars['uuid'];
+};
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: Maybe<Scalars['String']>;
@@ -164,6 +171,30 @@ export type Note = {
   /** An object relationship */
   user: User;
   user_id: Scalars['String'];
+  /** An array relationship */
+  views: Array<Note_View>;
+  /** An aggregate relationship */
+  views_aggregate: Note_View_Aggregate;
+};
+
+
+/** columns and relationships of "note" */
+export type NoteViewsArgs = {
+  distinct_on?: Maybe<Array<Note_View_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_View_Order_By>>;
+  where?: Maybe<Note_View_Bool_Exp>;
+};
+
+
+/** columns and relationships of "note" */
+export type NoteViews_AggregateArgs = {
+  distinct_on?: Maybe<Array<Note_View_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_View_Order_By>>;
+  where?: Maybe<Note_View_Bool_Exp>;
 };
 
 /** Boolean expression to filter rows from the table "note". All fields are combined with a logical 'AND'. */
@@ -177,6 +208,7 @@ export type Note_Bool_Exp = {
   location?: Maybe<Geography_Comparison_Exp>;
   user?: Maybe<User_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
+  views?: Maybe<Note_View_Bool_Exp>;
 };
 
 /** response of any mutation on the table "note" */
@@ -196,6 +228,7 @@ export type Note_Order_By = {
   location?: Maybe<Order_By>;
   user?: Maybe<User_Order_By>;
   user_id?: Maybe<Order_By>;
+  views_aggregate?: Maybe<Note_View_Aggregate_Order_By>;
 };
 
 /** primary key columns input for table: note */
@@ -222,6 +255,86 @@ export type Note_Set_Input = {
   deleted_at?: Maybe<Scalars['timestamptz']>;
 };
 
+/** columns and relationships of "note_view" */
+export type Note_View = {
+  __typename?: 'note_view';
+  /** An object relationship */
+  note: Note;
+  note_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "note_view" */
+export type Note_View_Aggregate = {
+  __typename?: 'note_view_aggregate';
+  aggregate?: Maybe<Note_View_Aggregate_Fields>;
+  nodes: Array<Note_View>;
+};
+
+/** aggregate fields of "note_view" */
+export type Note_View_Aggregate_Fields = {
+  __typename?: 'note_view_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Note_View_Max_Fields>;
+  min?: Maybe<Note_View_Min_Fields>;
+};
+
+
+/** aggregate fields of "note_view" */
+export type Note_View_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Note_View_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "note_view" */
+export type Note_View_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Note_View_Max_Order_By>;
+  min?: Maybe<Note_View_Min_Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "note_view". All fields are combined with a logical 'AND'. */
+export type Note_View_Bool_Exp = {
+  _and?: Maybe<Array<Note_View_Bool_Exp>>;
+  _not?: Maybe<Note_View_Bool_Exp>;
+  _or?: Maybe<Array<Note_View_Bool_Exp>>;
+  note?: Maybe<Note_Bool_Exp>;
+  note_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type Note_View_Max_Fields = {
+  __typename?: 'note_view_max_fields';
+  note_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "note_view" */
+export type Note_View_Max_Order_By = {
+  note_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Note_View_Min_Fields = {
+  __typename?: 'note_view_min_fields';
+  note_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "note_view" */
+export type Note_View_Min_Order_By = {
+  note_id?: Maybe<Order_By>;
+};
+
+/** Ordering options when selecting data from "note_view". */
+export type Note_View_Order_By = {
+  note?: Maybe<Note_Order_By>;
+  note_id?: Maybe<Order_By>;
+};
+
+/** select columns of table "note_view" */
+export enum Note_View_Select_Column {
+  /** column name */
+  NoteId = 'note_id'
+}
+
 /** column ordering options */
 export enum Order_By {
   /** in ascending order, nulls last */
@@ -240,14 +353,24 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root';
+  get_note: GetNoteOutput;
   /** fetch data from the table: "note" */
   note: Array<Note>;
   /** fetch data from the table: "note" using primary key columns */
   note_by_pk?: Maybe<Note>;
+  /** fetch data from the table: "note_view" */
+  note_view: Array<Note_View>;
+  /** fetch aggregated fields from the table: "note_view" */
+  note_view_aggregate: Note_View_Aggregate;
   /** fetch data from the table: "user" */
   user: Array<User>;
   /** fetch data from the table: "user" using primary key columns */
   user_by_pk?: Maybe<User>;
+};
+
+
+export type Query_RootGet_NoteArgs = {
+  note_id: Scalars['uuid'];
 };
 
 
@@ -262,6 +385,24 @@ export type Query_RootNoteArgs = {
 
 export type Query_RootNote_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootNote_ViewArgs = {
+  distinct_on?: Maybe<Array<Note_View_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_View_Order_By>>;
+  where?: Maybe<Note_View_Bool_Exp>;
+};
+
+
+export type Query_RootNote_View_AggregateArgs = {
+  distinct_on?: Maybe<Array<Note_View_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_View_Order_By>>;
+  where?: Maybe<Note_View_Bool_Exp>;
 };
 
 
@@ -295,6 +436,10 @@ export type Subscription_Root = {
   note: Array<Note>;
   /** fetch data from the table: "note" using primary key columns */
   note_by_pk?: Maybe<Note>;
+  /** fetch data from the table: "note_view" */
+  note_view: Array<Note_View>;
+  /** fetch aggregated fields from the table: "note_view" */
+  note_view_aggregate: Note_View_Aggregate;
   /** fetch data from the table: "user" */
   user: Array<User>;
   /** fetch data from the table: "user" using primary key columns */
@@ -313,6 +458,24 @@ export type Subscription_RootNoteArgs = {
 
 export type Subscription_RootNote_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootNote_ViewArgs = {
+  distinct_on?: Maybe<Array<Note_View_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_View_Order_By>>;
+  where?: Maybe<Note_View_Bool_Exp>;
+};
+
+
+export type Subscription_RootNote_View_AggregateArgs = {
+  distinct_on?: Maybe<Array<Note_View_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_View_Order_By>>;
+  where?: Maybe<Note_View_Bool_Exp>;
 };
 
 
@@ -445,15 +608,24 @@ export type NoteQueryVariables = Exact<{
 
 export type NoteQuery = (
   { __typename?: 'query_root' }
-  & { note?: Maybe<(
-    { __typename?: 'note' }
-    & Pick<Note, 'id' | 'content'>
-    & { createdAt: Note['created_at'] }
-    & { user: (
-      { __typename?: 'user' }
-      & Pick<User, 'username'>
+  & { note: (
+    { __typename?: 'GetNoteOutput' }
+    & { data: (
+      { __typename?: 'note' }
+      & Pick<Note, 'id' | 'content'>
+      & { createdAt: Note['created_at'] }
+      & { user: (
+        { __typename?: 'user' }
+        & Pick<User, 'username'>
+      ), views_aggregate: (
+        { __typename?: 'note_view_aggregate' }
+        & { aggregate?: Maybe<(
+          { __typename?: 'note_view_aggregate_fields' }
+          & Pick<Note_View_Aggregate_Fields, 'count'>
+        )> }
+      ) }
     ) }
-  )> }
+  ) }
 );
 
 export type MyNoteQueryVariables = Exact<{
@@ -467,6 +639,13 @@ export type MyNoteQuery = (
     { __typename?: 'note' }
     & Pick<Note, 'id' | 'location' | 'content'>
     & { createdAt: Note['created_at'] }
+    & { views_aggregate: (
+      { __typename?: 'note_view_aggregate' }
+      & { aggregate?: Maybe<(
+        { __typename?: 'note_view_aggregate_fields' }
+        & Pick<Note_View_Aggregate_Fields, 'count'>
+      )> }
+    ) }
   )> }
 );
 
@@ -481,6 +660,13 @@ export type MyNotesQuery = (
     { __typename?: 'note' }
     & Pick<Note, 'id' | 'content'>
     & { createdAt: Note['created_at'] }
+    & { views_aggregate: (
+      { __typename?: 'note_view_aggregate' }
+      & { aggregate?: Maybe<(
+        { __typename?: 'note_view_aggregate_fields' }
+        & Pick<Note_View_Aggregate_Fields, 'count'>
+      )> }
+    ) }
   )> }
 );
 
@@ -619,12 +805,19 @@ export type NotesLazyQueryHookResult = ReturnType<typeof useNotesLazyQuery>;
 export type NotesQueryResult = Apollo.QueryResult<NotesQuery, NotesQueryVariables>;
 export const NoteDocument = gql`
     query Note($id: uuid!) {
-  note: note_by_pk(id: $id) {
-    id
-    content
-    createdAt: created_at
-    user {
-      username
+  note: get_note(note_id: $id) {
+    data: note {
+      id
+      content
+      createdAt: created_at
+      user {
+        username
+      }
+      views_aggregate {
+        aggregate {
+          count
+        }
+      }
     }
   }
 }
@@ -664,6 +857,11 @@ export const MyNoteDocument = gql`
     location
     createdAt: created_at
     content
+    views_aggregate {
+      aggregate {
+        count
+      }
+    }
   }
 }
     `;
@@ -701,6 +899,11 @@ export const MyNotesDocument = gql`
     id
     createdAt: created_at
     content
+    views_aggregate {
+      aggregate {
+        count
+      }
+    }
   }
 }
     `;

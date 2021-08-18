@@ -42,6 +42,9 @@ const MyNoteDetailScreen = () => {
             <Text style={styles.infoDetailText}>
               Located at {data.note?.location.coordinates[1]} {data.note?.location.coordinates[0]}
             </Text>
+            <Text style={styles.infoDetailText}>
+              Viewed by {data.note?.views_aggregate.aggregate?.count ?? 0} people
+            </Text>
           </View>
         )}
         <DestructiveButton
