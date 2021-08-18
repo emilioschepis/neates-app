@@ -35,11 +35,7 @@ const ProfileStack = () => {
         <>
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="MyNotes" component={MyNotesScreen} options={{ headerTitle: "My notes" }} />
-          <Stack.Screen
-            name="MyNoteDetail"
-            component={MyNoteDetailScreen}
-            options={({ route }) => ({ headerTitle: route.params.content })}
-          />
+          <Stack.Screen name="MyNoteDetail" component={MyNoteDetailScreen} options={{ headerTitle: "" }} />
         </>
       )}
     </Stack.Navigator>

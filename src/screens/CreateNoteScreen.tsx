@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import * as ExpoLocation from "expo-location";
 import React, { useCallback } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import CreateNoteForm, { CreateNoteFormData } from "../components/CreateNoteForm";
 import KeyboardAvoidingView from "../components/KeyboardAvoidingView";
@@ -13,14 +14,21 @@ import { updateCacheAfterCreateNote, updateCacheWith } from "../utils/cacheUtils
 type CreateNoteScreenNavigationProp = StackNavigationProp<MapStackParamList, "CreateNote">;
 
 const CreateNoteScreen = () => {
-  const { loading: locationLoading, granted, location } = useLocation();
+  const { granted } = useLocation();
   const navigation = useNavigation<CreateNoteScreenNavigationProp>();
   const [createNote] = useCreateNoteMutation();
 
   const handleSubmit = useCallback(
     async (fields: CreateNoteFormData) => {
+      // Retrieves the current location instead of the cached one from `useLocation`.
+      const location = await ExpoLocation.getCurrentPositionAsync();
+
       await createNote({
-        variables: { content: fields.content, latitude: location.latitude, longitude: location.longitude },
+        variables: {
+          content: fields.content,
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        },
         update: updateCacheWith(updateCacheAfterCreateNote),
         refetchQueries: ["Notes"],
         awaitRefetchQueries: true,
@@ -28,16 +36,8 @@ const CreateNoteScreen = () => {
 
       navigation.pop();
     },
-    [createNote, location]
+    [createNote, location, granted]
   );
-
-  if (locationLoading) {
-    return (
-      <View style={StyleSheet.absoluteFill}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
 
   if (!granted) {
     return (
