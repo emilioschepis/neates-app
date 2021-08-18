@@ -1,5 +1,6 @@
 export enum LocationConstants {
-  minimumRefetchDistance = 50.0,
+  maximumQueryDistance = 1000.0,
+  minimumRefetchDistance = 200.0,
   minimumRefetchTime = 5000,
 }
 

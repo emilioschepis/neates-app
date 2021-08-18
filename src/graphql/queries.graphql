@@ -1,4 +1,4 @@
-query Notes($latitude: Float!, $longitude: Float!, $distance: Float! = 100) {
+query Notes($latitude: Float!, $longitude: Float!, $distance: Float!) {
   notes: note(
     where: {
       location: { _st_d_within: { distance: $distance, from: { type: "Point", coordinates: [$longitude, $latitude] } } }

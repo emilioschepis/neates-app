@@ -3,6 +3,7 @@ import { useMemo } from "react";
 
 import { useLocation } from "../context/LocationContext";
 import { NotesQuery, useNotesQuery } from "../graphql/generated";
+import { LocationConstants } from "../utils/constants";
 
 type UseNotesResult = {
   loading: boolean;
@@ -20,6 +21,7 @@ export default function useNotes(): UseNotesResult {
     variables: {
       latitude: location.latitude,
       longitude: location.longitude,
+      distance: LocationConstants.maximumQueryDistance,
     },
     skip: locationLoading || !granted,
   });

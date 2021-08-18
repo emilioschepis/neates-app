@@ -426,7 +426,7 @@ export type DeleteNoteMutation = (
 export type NotesQueryVariables = Exact<{
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
-  distance?: Scalars['Float'];
+  distance: Scalars['Float'];
 }>;
 
 
@@ -577,7 +577,7 @@ export type DeleteNoteMutationHookResult = ReturnType<typeof useDeleteNoteMutati
 export type DeleteNoteMutationResult = Apollo.MutationResult<DeleteNoteMutation>;
 export type DeleteNoteMutationOptions = Apollo.BaseMutationOptions<DeleteNoteMutation, DeleteNoteMutationVariables>;
 export const NotesDocument = gql`
-    query Notes($latitude: Float!, $longitude: Float!, $distance: Float! = 100) {
+    query Notes($latitude: Float!, $longitude: Float!, $distance: Float!) {
   notes: note(
     where: {location: {_st_d_within: {distance: $distance, from: {type: "Point", coordinates: [$longitude, $latitude]}}}}
   ) {
