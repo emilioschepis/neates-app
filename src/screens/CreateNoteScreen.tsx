@@ -36,7 +36,7 @@ const CreateNoteScreen = () => {
 
       navigation.pop();
     },
-    [createNote, location, granted]
+    [createNote, granted]
   );
 
   if (!granted) {
