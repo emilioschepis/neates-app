@@ -8,7 +8,7 @@ import KeyboardAvoidingView from "../components/KeyboardAvoidingView";
 import { useLocation } from "../context/LocationContext";
 import { useCreateNoteMutation } from "../graphql/generated";
 import { MapStackParamList } from "../navigation/MapStack";
-import { updateCacheAfterCreateNote } from "../utils/cacheUtils";
+import { updateCacheAfterCreateNote, updateCacheWith } from "../utils/cacheUtils";
 
 type CreateNoteScreenNavigationProp = StackNavigationProp<MapStackParamList, "CreateNote">;
 
@@ -21,7 +21,7 @@ const CreateNoteScreen = () => {
     async (fields: CreateNoteFormData) => {
       await createNote({
         variables: { content: fields.content, latitude: location.latitude, longitude: location.longitude },
-        update: (cache, { data }) => data && updateCacheAfterCreateNote(cache, data),
+        update: updateCacheWith(updateCacheAfterCreateNote),
         refetchQueries: ["Notes"],
         awaitRefetchQueries: true,
       });

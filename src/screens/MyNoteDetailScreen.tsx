@@ -7,7 +7,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import DestructiveButton from "../components/core/DestructiveButton";
 import { useDeleteNoteMutation, useMyNoteQuery } from "../graphql/generated";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
-import { updateCacheAfterDeleteNote } from "../utils/cacheUtils";
+import { updateCacheAfterDeleteNote, updateCacheWith } from "../utils/cacheUtils";
 
 type MyNoteDetailScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "MyNoteDetail">;
 type MyNoteDetailScreenRouteProp = RouteProp<ProfileStackParamList, "MyNoteDetail">;
@@ -18,7 +18,7 @@ const MyNoteDetailScreen = () => {
   const { loading, data } = useMyNoteQuery({ variables: { noteId: route.params.id } });
   const [deleteNote, { loading: deleting }] = useDeleteNoteMutation({
     variables: { noteId: route.params.id },
-    update: (cache, { data }) => updateCacheAfterDeleteNote(cache, data ?? {}),
+    update: updateCacheWith(updateCacheAfterDeleteNote),
   });
 
   const handleDelete = useCallback(() => {

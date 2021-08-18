@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
 };
 
-export function useAuth() {
+export function useOptionalAuth() {
   const context = useContext(AuthContext);
 
   if (context === undefined) {
@@ -59,4 +59,14 @@ export function useAuth() {
   }
 
   return context;
+}
+
+export function useAuth() {
+  const auth = useOptionalAuth();
+
+  if (!auth.user) {
+    throw new Error("User is not defined.");
+  }
+
+  return auth;
 }

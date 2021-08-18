@@ -1,14 +1,14 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
-import { useAuth } from "../context/AuthContext";
+import { useOptionalAuth } from "../context/AuthContext";
 import SplashScreen from "../screens/SplashScreen";
 import TabNavigator from "./TabNavigator";
 
 const Stack = createStackNavigator();
 
 const MainStack = () => {
-  const auth = useAuth();
+  const auth = useOptionalAuth();
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

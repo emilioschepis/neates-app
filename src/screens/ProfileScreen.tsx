@@ -15,7 +15,7 @@ type ProfileScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "P
 const ProfileScreen = () => {
   const theme = useTheme();
   const { user } = useAuth();
-  const { loading, data } = useUserQuery({ variables: { userId: user?.id ?? "" } });
+  const { loading, data } = useUserQuery({ variables: { userId: user.id } });
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const [signingOut, setSigningOut] = useState(false);
   const handleSignOut = useCallback(() => {

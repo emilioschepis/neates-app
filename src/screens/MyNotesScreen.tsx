@@ -13,7 +13,7 @@ type MyNotesScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "M
 const MyNotesScreen = () => {
   const navigation = useNavigation<MyNotesScreenNavigationProp>();
   const { user } = useAuth();
-  const { loading, data } = useMyNotesQuery({ variables: { userId: user?.id ?? "" } });
+  const { loading, data } = useMyNotesQuery({ variables: { userId: user.id } });
 
   const handleSelectNote = useCallback(
     (id: string) => {
