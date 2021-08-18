@@ -21,6 +21,15 @@ query Note($id: uuid!) {
   }
 }
 
+query MyNote($noteId: uuid!) {
+  note: note_by_pk(id: $noteId) {
+    id
+    location
+    createdAt: created_at
+    content
+  }
+}
+
 query MyNotes($userId: String!) {
   notes: note(where: { user_id: { _eq: $userId } }, order_by: { created_at: desc }) {
     id

@@ -48,7 +48,7 @@ const ProfileScreen = () => {
           >
             <Ionicons name="grid" size={24} color={theme.colors.primary} />
             <Text numberOfLines={1} style={styles.boxText}>
-              View all notes
+              View my notes
             </Text>
           </Pressable>
           <View style={styles.spacer} />

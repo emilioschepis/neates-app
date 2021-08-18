@@ -1,5 +1,18 @@
 mutation CreateNote($content: String!, $latitude: Float!, $longitude: Float!) {
   create_note(content: $content, latitude: $latitude, longitude: $longitude) {
-    note_id
+    note {
+      id
+      content
+      createdAt: created_at
+      user {
+        username
+      }
+    }
+  }
+}
+
+mutation DeleteNote($noteId: uuid!) {
+  delete_note: update_note_by_pk(pk_columns: { id: $noteId }, _set: { deleted_at: now }) {
+    id
   }
 }

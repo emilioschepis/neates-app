@@ -1,26 +1,47 @@
+import { Ionicons } from "@expo/vector-icons";
+import dayjs from "dayjs";
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { MyNotesQuery } from "../graphql/generated";
 
 type MyNotesItemProps = {
   note: MyNotesQuery["notes"][number];
+  onPress: () => void;
 };
 
-const MyNotesItem = ({ note }: MyNotesItemProps) => {
+const MyNotesItem = ({ note, onPress }: MyNotesItemProps) => {
   return (
-    <View style={styles.container}>
-      <Text>{note.content}</Text>
-      <Text>{note.createdAt}</Text>
-    </View>
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.container, { opacity: pressed ? 0.6 : 1 }]}>
+      <View style={styles.contentContainer}>
+        <Text style={styles.contentText} numberOfLines={2}>
+          {note.content}
+        </Text>
+        <Text>Created {dayjs(note.createdAt).format("LLL")}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={18} color="black" />
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "gray",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "lightgray",
+    padding: 8,
+    marginBottom: 8,
+  },
+  contentContainer: {
+    flexDirection: "column",
+  },
+  contentText: {
+    fontWeight: "bold",
+    marginBottom: 2,
   },
 });
 

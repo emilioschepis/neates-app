@@ -126,6 +126,10 @@ export type Geometry_Comparison_Exp = {
 export type Mutation_Root = {
   __typename?: 'mutation_root';
   create_note: CreateNoteOutput;
+  /** update data of the table: "note" */
+  update_note?: Maybe<Note_Mutation_Response>;
+  /** update single row of the table: "note" */
+  update_note_by_pk?: Maybe<Note>;
 };
 
 
@@ -134,6 +138,20 @@ export type Mutation_RootCreate_NoteArgs = {
   content: Scalars['String'];
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_NoteArgs = {
+  _set?: Maybe<Note_Set_Input>;
+  where: Note_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Note_By_PkArgs = {
+  _set?: Maybe<Note_Set_Input>;
+  pk_columns: Note_Pk_Columns_Input;
 };
 
 /** columns and relationships of "note" */
@@ -161,6 +179,15 @@ export type Note_Bool_Exp = {
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
+/** response of any mutation on the table "note" */
+export type Note_Mutation_Response = {
+  __typename?: 'note_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Note>;
+};
+
 /** Ordering options when selecting data from "note". */
 export type Note_Order_By = {
   content?: Maybe<Order_By>;
@@ -169,6 +196,11 @@ export type Note_Order_By = {
   location?: Maybe<Order_By>;
   user?: Maybe<User_Order_By>;
   user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: note */
+export type Note_Pk_Columns_Input = {
+  id: Scalars['uuid'];
 };
 
 /** select columns of table "note" */
@@ -184,6 +216,11 @@ export enum Note_Select_Column {
   /** column name */
   UserId = 'user_id'
 }
+
+/** input type for updating data in table "note" */
+export type Note_Set_Input = {
+  deleted_at?: Maybe<Scalars['timestamptz']>;
+};
 
 /** column ordering options */
 export enum Order_By {
@@ -361,8 +398,29 @@ export type CreateNoteMutation = (
   { __typename?: 'mutation_root' }
   & { create_note: (
     { __typename?: 'CreateNoteOutput' }
-    & Pick<CreateNoteOutput, 'note_id'>
+    & { note: (
+      { __typename?: 'note' }
+      & Pick<Note, 'id' | 'content'>
+      & { createdAt: Note['created_at'] }
+      & { user: (
+        { __typename?: 'user' }
+        & Pick<User, 'username'>
+      ) }
+    ) }
   ) }
+);
+
+export type DeleteNoteMutationVariables = Exact<{
+  noteId: Scalars['uuid'];
+}>;
+
+
+export type DeleteNoteMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_note?: Maybe<(
+    { __typename?: 'note' }
+    & Pick<Note, 'id'>
+  )> }
 );
 
 export type NotesQueryVariables = Exact<{
@@ -398,6 +456,20 @@ export type NoteQuery = (
   )> }
 );
 
+export type MyNoteQueryVariables = Exact<{
+  noteId: Scalars['uuid'];
+}>;
+
+
+export type MyNoteQuery = (
+  { __typename?: 'query_root' }
+  & { note?: Maybe<(
+    { __typename?: 'note' }
+    & Pick<Note, 'id' | 'location' | 'content'>
+    & { createdAt: Note['created_at'] }
+  )> }
+);
+
 export type MyNotesQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
@@ -429,7 +501,14 @@ export type UserQuery = (
 export const CreateNoteDocument = gql`
     mutation CreateNote($content: String!, $latitude: Float!, $longitude: Float!) {
   create_note(content: $content, latitude: $latitude, longitude: $longitude) {
-    note_id
+    note {
+      id
+      content
+      createdAt: created_at
+      user {
+        username
+      }
+    }
   }
 }
     `;
@@ -461,6 +540,42 @@ export function useCreateNoteMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateNoteMutationHookResult = ReturnType<typeof useCreateNoteMutation>;
 export type CreateNoteMutationResult = Apollo.MutationResult<CreateNoteMutation>;
 export type CreateNoteMutationOptions = Apollo.BaseMutationOptions<CreateNoteMutation, CreateNoteMutationVariables>;
+export const DeleteNoteDocument = gql`
+    mutation DeleteNote($noteId: uuid!) {
+  delete_note: update_note_by_pk(
+    pk_columns: {id: $noteId}
+    _set: {deleted_at: now}
+  ) {
+    id
+  }
+}
+    `;
+export type DeleteNoteMutationFn = Apollo.MutationFunction<DeleteNoteMutation, DeleteNoteMutationVariables>;
+
+/**
+ * __useDeleteNoteMutation__
+ *
+ * To run a mutation, you first call `useDeleteNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteNoteMutation, { data, loading, error }] = useDeleteNoteMutation({
+ *   variables: {
+ *      noteId: // value for 'noteId'
+ *   },
+ * });
+ */
+export function useDeleteNoteMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNoteMutation, DeleteNoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteNoteMutation, DeleteNoteMutationVariables>(DeleteNoteDocument, options);
+      }
+export type DeleteNoteMutationHookResult = ReturnType<typeof useDeleteNoteMutation>;
+export type DeleteNoteMutationResult = Apollo.MutationResult<DeleteNoteMutation>;
+export type DeleteNoteMutationOptions = Apollo.BaseMutationOptions<DeleteNoteMutation, DeleteNoteMutationVariables>;
 export const NotesDocument = gql`
     query Notes($latitude: Float!, $longitude: Float!, $distance: Float! = 100) {
   notes: note(
@@ -542,6 +657,44 @@ export function useNoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NoteQ
 export type NoteQueryHookResult = ReturnType<typeof useNoteQuery>;
 export type NoteLazyQueryHookResult = ReturnType<typeof useNoteLazyQuery>;
 export type NoteQueryResult = Apollo.QueryResult<NoteQuery, NoteQueryVariables>;
+export const MyNoteDocument = gql`
+    query MyNote($noteId: uuid!) {
+  note: note_by_pk(id: $noteId) {
+    id
+    location
+    createdAt: created_at
+    content
+  }
+}
+    `;
+
+/**
+ * __useMyNoteQuery__
+ *
+ * To run a query within a React component, call `useMyNoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyNoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyNoteQuery({
+ *   variables: {
+ *      noteId: // value for 'noteId'
+ *   },
+ * });
+ */
+export function useMyNoteQuery(baseOptions: Apollo.QueryHookOptions<MyNoteQuery, MyNoteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyNoteQuery, MyNoteQueryVariables>(MyNoteDocument, options);
+      }
+export function useMyNoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyNoteQuery, MyNoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyNoteQuery, MyNoteQueryVariables>(MyNoteDocument, options);
+        }
+export type MyNoteQueryHookResult = ReturnType<typeof useMyNoteQuery>;
+export type MyNoteLazyQueryHookResult = ReturnType<typeof useMyNoteLazyQuery>;
+export type MyNoteQueryResult = Apollo.QueryResult<MyNoteQuery, MyNoteQueryVariables>;
 export const MyNotesDocument = gql`
     query MyNotes($userId: String!) {
   notes: note(where: {user_id: {_eq: $userId}}, order_by: {created_at: desc}) {

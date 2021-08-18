@@ -3,13 +3,14 @@ import React from "react";
 import { View, StyleSheet, Pressable, Text, ActivityIndicator } from "react-native";
 
 type ButtonProps = {
+  color?: string;
   children: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
   onPress: () => void;
 };
 
-const Button = ({ children, disabled = false, loading = false, onPress }: ButtonProps) => {
+const Button = ({ color, children, disabled = false, loading = false, onPress }: ButtonProps) => {
   const theme = useTheme();
 
   return (
@@ -18,7 +19,7 @@ const Button = ({ children, disabled = false, loading = false, onPress }: Button
       style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1.0, width: "100%" })}
       onPress={onPress}
     >
-      <View style={[styles.container, { backgroundColor: disabled ? "gray" : theme.colors.primary }]}>
+      <View style={[styles.container, { backgroundColor: disabled ? "gray" : color ?? theme.colors.primary }]}>
         {loading ? (
           <View style={styles.loading}>
             <ActivityIndicator size="small" color="white" />
