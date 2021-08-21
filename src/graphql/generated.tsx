@@ -36,6 +36,14 @@ export type GetNoteOutput = {
   view_count: Scalars['Int'];
 };
 
+export type GetNotesOutput = {
+  __typename?: 'GetNotesOutput';
+  content: Scalars['String'];
+  id: Scalars['uuid'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+};
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: Maybe<Scalars['String']>;
@@ -260,6 +268,7 @@ export type Note_Set_Input = {
 /** columns and relationships of "note_view" */
 export type Note_View = {
   __typename?: 'note_view';
+  created_at: Scalars['timestamptz'];
   /** An object relationship */
   note: Note;
   note_id: Scalars['uuid'];
@@ -299,6 +308,7 @@ export type Note_View_Bool_Exp = {
   _and?: Maybe<Array<Note_View_Bool_Exp>>;
   _not?: Maybe<Note_View_Bool_Exp>;
   _or?: Maybe<Array<Note_View_Bool_Exp>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
   note?: Maybe<Note_Bool_Exp>;
   note_id?: Maybe<Uuid_Comparison_Exp>;
 };
@@ -306,33 +316,40 @@ export type Note_View_Bool_Exp = {
 /** aggregate max on columns */
 export type Note_View_Max_Fields = {
   __typename?: 'note_view_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   note_id?: Maybe<Scalars['uuid']>;
 };
 
 /** order by max() on columns of table "note_view" */
 export type Note_View_Max_Order_By = {
+  created_at?: Maybe<Order_By>;
   note_id?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Note_View_Min_Fields = {
   __typename?: 'note_view_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   note_id?: Maybe<Scalars['uuid']>;
 };
 
 /** order by min() on columns of table "note_view" */
 export type Note_View_Min_Order_By = {
+  created_at?: Maybe<Order_By>;
   note_id?: Maybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "note_view". */
 export type Note_View_Order_By = {
+  created_at?: Maybe<Order_By>;
   note?: Maybe<Note_Order_By>;
   note_id?: Maybe<Order_By>;
 };
 
 /** select columns of table "note_view" */
 export enum Note_View_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
   /** column name */
   NoteId = 'note_id'
 }
@@ -356,6 +373,7 @@ export enum Order_By {
 export type Query_Root = {
   __typename?: 'query_root';
   get_note: GetNoteOutput;
+  get_notes: Array<GetNotesOutput>;
   /** fetch data from the table: "note" */
   note: Array<Note>;
   /** fetch data from the table: "note" using primary key columns */
@@ -373,6 +391,12 @@ export type Query_Root = {
 
 export type Query_RootGet_NoteArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootGet_NotesArgs = {
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
 };
 
 
@@ -511,6 +535,8 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "user" */
 export type User = {
   __typename?: 'user';
+  created_at: Scalars['timestamptz'];
+  email: Scalars['String'];
   id: Scalars['String'];
   username: Scalars['String'];
 };
@@ -520,18 +546,26 @@ export type User_Bool_Exp = {
   _and?: Maybe<Array<User_Bool_Exp>>;
   _not?: Maybe<User_Bool_Exp>;
   _or?: Maybe<Array<User_Bool_Exp>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  email?: Maybe<String_Comparison_Exp>;
   id?: Maybe<String_Comparison_Exp>;
   username?: Maybe<String_Comparison_Exp>;
 };
 
 /** Ordering options when selecting data from "user". */
 export type User_Order_By = {
+  created_at?: Maybe<Order_By>;
+  email?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   username?: Maybe<Order_By>;
 };
 
 /** select columns of table "user" */
 export enum User_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Email = 'email',
   /** column name */
   Id = 'id',
   /** column name */
@@ -587,15 +621,14 @@ export type DeleteNoteMutation = (
 export type NotesQueryVariables = Exact<{
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
-  distance: Scalars['Float'];
 }>;
 
 
 export type NotesQuery = (
   { __typename?: 'query_root' }
   & { notes: Array<(
-    { __typename?: 'note' }
-    & Pick<Note, 'id' | 'content' | 'location'>
+    { __typename?: 'GetNotesOutput' }
+    & Pick<GetNotesOutput, 'id' | 'content' | 'latitude' | 'longitude'>
   )> }
 );
 
@@ -745,13 +778,12 @@ export type DeleteNoteMutationHookResult = ReturnType<typeof useDeleteNoteMutati
 export type DeleteNoteMutationResult = Apollo.MutationResult<DeleteNoteMutation>;
 export type DeleteNoteMutationOptions = Apollo.BaseMutationOptions<DeleteNoteMutation, DeleteNoteMutationVariables>;
 export const NotesDocument = gql`
-    query Notes($latitude: Float!, $longitude: Float!, $distance: Float!) {
-  notes: note(
-    where: {location: {_st_d_within: {distance: $distance, from: {type: "Point", coordinates: [$longitude, $latitude]}}}}
-  ) {
+    query Notes($latitude: Float!, $longitude: Float!) {
+  notes: get_notes(latitude: $latitude, longitude: $longitude) {
     id
     content
-    location
+    latitude
+    longitude
   }
 }
     `;
@@ -770,7 +802,6 @@ export const NotesDocument = gql`
  *   variables: {
  *      latitude: // value for 'latitude'
  *      longitude: // value for 'longitude'
- *      distance: // value for 'distance'
  *   },
  * });
  */

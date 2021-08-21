@@ -34,8 +34,8 @@ const CustomMap = ({ notes, buttons, onSelectNote }: CustomMapProps) => {
           <MarkerView
             key={note.id}
             coordinate={{
-              latitude: note.location.coordinates[1],
-              longitude: note.location.coordinates[0],
+              latitude: note.latitude,
+              longitude: note.longitude,
             }}
             onCalloutPress={() => onSelectNote(note.id)}
           >
