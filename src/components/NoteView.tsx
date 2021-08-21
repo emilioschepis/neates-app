@@ -7,7 +7,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import { NoteQuery } from "../graphql/generated";
 
 type NoteViewProps = {
-  note: NoteQuery["note"]["data"];
+  note: NoteQuery["note"];
 };
 
 const NoteView = ({ note }: NoteViewProps) => {
@@ -48,12 +48,12 @@ const NoteView = ({ note }: NoteViewProps) => {
             <View style={styles.viewsContainer}>
               <Ionicons name="eye" size={18} color="black" />
               <Text numberOfLines={1} style={styles.viewsText}>
-                Viewed by {note?.views_aggregate.aggregate?.count ?? 0} people
+                Viewed by {note.viewCount} people
               </Text>
             </View>
             <View>
               <Text numberOfLines={1} style={styles.noteInfoText}>
-                Created by <Text style={{ fontWeight: "bold" }}>{note?.user.username}</Text>,
+                Created by <Text style={{ fontWeight: "bold" }}>{note.username}</Text>,
               </Text>
               <Text numberOfLines={2} style={styles.noteInfoText}>
                 {createdAt}

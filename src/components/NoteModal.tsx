@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import Modal from "react-native-modal";
 
 import { useNoteQuery } from "../graphql/generated";
@@ -11,14 +11,14 @@ type NoteModalProps = {
 };
 
 const NoteModal = ({ noteId, onClose }: NoteModalProps) => {
-  const { data } = useNoteQuery({
+  const { data, loading } = useNoteQuery({
     variables: { id: noteId },
     skip: !noteId,
   });
 
   return (
-    <Modal isVisible={!!noteId && data?.note?.data.id === noteId} onBackdropPress={onClose}>
-      <View style={styles.container}>{data && <NoteView note={data.note.data} />}</View>
+    <Modal isVisible={!!noteId} onBackdropPress={onClose}>
+      <View style={styles.container}>{loading || !data ? <ActivityIndicator /> : <NoteView note={data.note} />}</View>
     </Modal>
   );
 };

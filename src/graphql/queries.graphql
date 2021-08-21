@@ -11,20 +11,12 @@ query Notes($latitude: Float!, $longitude: Float!, $distance: Float!) {
 }
 
 query Note($id: uuid!) {
-  note: get_note(note_id: $id) {
-    data: note {
-      id
-      content
-      createdAt: created_at
-      user {
-        username
-      }
-      views_aggregate {
-        aggregate {
-          count
-        }
-      }
-    }
+  note: get_note(id: $id) {
+    id
+    content
+    createdAt: created_at
+    username
+    viewCount: view_count
   }
 }
 

@@ -22,16 +22,18 @@ export type Scalars = {
 
 export type CreateNoteOutput = {
   __typename?: 'CreateNoteOutput';
+  id: Scalars['uuid'];
   /** An object relationship */
   note: Note;
-  note_id: Scalars['uuid'];
 };
 
 export type GetNoteOutput = {
   __typename?: 'GetNoteOutput';
-  /** An object relationship */
-  note: Note;
-  note_id: Scalars['uuid'];
+  content: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  username: Scalars['String'];
+  view_count: Scalars['Int'];
 };
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
@@ -370,7 +372,7 @@ export type Query_Root = {
 
 
 export type Query_RootGet_NoteArgs = {
-  note_id: Scalars['uuid'];
+  id: Scalars['uuid'];
 };
 
 
@@ -565,10 +567,6 @@ export type CreateNoteMutation = (
       { __typename?: 'note' }
       & Pick<Note, 'id' | 'content'>
       & { createdAt: Note['created_at'] }
-      & { user: (
-        { __typename?: 'user' }
-        & Pick<User, 'username'>
-      ) }
     ) }
   ) }
 );
@@ -610,21 +608,8 @@ export type NoteQuery = (
   { __typename?: 'query_root' }
   & { note: (
     { __typename?: 'GetNoteOutput' }
-    & { data: (
-      { __typename?: 'note' }
-      & Pick<Note, 'id' | 'content'>
-      & { createdAt: Note['created_at'] }
-      & { user: (
-        { __typename?: 'user' }
-        & Pick<User, 'username'>
-      ), views_aggregate: (
-        { __typename?: 'note_view_aggregate' }
-        & { aggregate?: Maybe<(
-          { __typename?: 'note_view_aggregate_fields' }
-          & Pick<Note_View_Aggregate_Fields, 'count'>
-        )> }
-      ) }
-    ) }
+    & Pick<GetNoteOutput, 'id' | 'content' | 'username'>
+    & { createdAt: GetNoteOutput['created_at'], viewCount: GetNoteOutput['view_count'] }
   ) }
 );
 
@@ -691,9 +676,6 @@ export const CreateNoteDocument = gql`
       id
       content
       createdAt: created_at
-      user {
-        username
-      }
     }
   }
 }
@@ -805,20 +787,12 @@ export type NotesLazyQueryHookResult = ReturnType<typeof useNotesLazyQuery>;
 export type NotesQueryResult = Apollo.QueryResult<NotesQuery, NotesQueryVariables>;
 export const NoteDocument = gql`
     query Note($id: uuid!) {
-  note: get_note(note_id: $id) {
-    data: note {
-      id
-      content
-      createdAt: created_at
-      user {
-        username
-      }
-      views_aggregate {
-        aggregate {
-          count
-        }
-      }
-    }
+  note: get_note(id: $id) {
+    id
+    content
+    createdAt: created_at
+    username
+    viewCount: view_count
   }
 }
     `;

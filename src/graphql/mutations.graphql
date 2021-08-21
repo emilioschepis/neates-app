@@ -4,9 +4,6 @@ mutation CreateNote($content: String!, $latitude: Float!, $longitude: Float!) {
       id
       content
       createdAt: created_at
-      user {
-        username
-      }
     }
   }
 }
