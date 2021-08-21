@@ -8,6 +8,20 @@ import CustomCallout from "./CustomCallout";
 import CustomMapButton, { CustomMapButtonProps } from "./CustomMapButton";
 import CustomMarker from "./CustomMarker";
 
+/**
+ * A custom map style that hides points of interest from the custom map.
+ */
+const CUSTOM_MAP_STYLE = [
+  {
+    featureType: "poi",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "transit",
+    stylers: [{ visibility: "off" }],
+  },
+];
+
 type CustomMapProps = {
   notes: NotesQuery["notes"];
   buttons: CustomMapButtonProps[];
@@ -29,7 +43,14 @@ const CustomMap = ({ notes, buttons, onSelectNote }: CustomMapProps) => {
 
   return (
     <View style={styles.container}>
-      <MapView ref={(map) => (mapRef.current = map)} style={styles.map} showsUserLocation onMapReady={resetMapRegion}>
+      <MapView
+        ref={(map) => (mapRef.current = map)}
+        style={styles.map}
+        showsUserLocation
+        showsPointsOfInterest={false}
+        customMapStyle={CUSTOM_MAP_STYLE}
+        onMapReady={resetMapRegion}
+      >
         {notes.map((note) => (
           <MarkerView
             key={note.id}
