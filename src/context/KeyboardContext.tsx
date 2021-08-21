@@ -28,17 +28,23 @@ export const KeyboardInsetProvider = ({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const onKeyboardWillShow: KeyboardEventListener = (event) => {
-      const inset = event.endCoordinates.screenY - (event.startCoordinates?.screenY ?? 0);
+      const currentInset = state.inset;
+      let inset = (event.startCoordinates?.screenY ?? 0) - event.endCoordinates.screenY;
 
       if (inset === 0) {
         // The keyboard is already showing, but the focus changed.
         return;
       }
 
+      if (currentInset !== 0) {
+        // Apply a relative inset, the keyboard height probably changed.
+        inset = currentInset + inset;
+      }
+
       dispatch({
         type: "setKeyboardInset",
         payload: {
-          inset: -inset,
+          inset,
           duration: event.duration,
         },
       });
@@ -61,7 +67,7 @@ export const KeyboardInsetProvider = ({ children }: { children: React.ReactNode 
       Keyboard.removeListener("keyboardWillShow", onKeyboardWillShow);
       Keyboard.removeListener("keyboardWillHide", onKeyboardWillHide);
     };
-  }, []);
+  }, [state.inset]);
 
   return <KeyboardContext.Provider value={state}>{children}</KeyboardContext.Provider>;
 };
