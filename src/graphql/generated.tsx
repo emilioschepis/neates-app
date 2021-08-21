@@ -667,9 +667,7 @@ export type MyNoteQuery = (
   )> }
 );
 
-export type MyNotesQueryVariables = Exact<{
-  userId: Scalars['String'];
-}>;
+export type MyNotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MyNotesQuery = (
@@ -899,8 +897,8 @@ export type MyNoteQueryHookResult = ReturnType<typeof useMyNoteQuery>;
 export type MyNoteLazyQueryHookResult = ReturnType<typeof useMyNoteLazyQuery>;
 export type MyNoteQueryResult = Apollo.QueryResult<MyNoteQuery, MyNoteQueryVariables>;
 export const MyNotesDocument = gql`
-    query MyNotes($userId: String!) {
-  notes: note(where: {user_id: {_eq: $userId}}, order_by: {created_at: desc}) {
+    query MyNotes {
+  notes: note(order_by: {created_at: desc}) {
     id
     createdAt: created_at
     content
@@ -925,11 +923,10 @@ export const MyNotesDocument = gql`
  * @example
  * const { data, loading, error } = useMyNotesQuery({
  *   variables: {
- *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useMyNotesQuery(baseOptions: Apollo.QueryHookOptions<MyNotesQuery, MyNotesQueryVariables>) {
+export function useMyNotesQuery(baseOptions?: Apollo.QueryHookOptions<MyNotesQuery, MyNotesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<MyNotesQuery, MyNotesQueryVariables>(MyNotesDocument, options);
       }

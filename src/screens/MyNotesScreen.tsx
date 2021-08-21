@@ -4,7 +4,6 @@ import React, { useCallback } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 import MyNotesList from "../components/MyNotesList";
-import { useAuth } from "../context/AuthContext";
 import { useMyNotesQuery } from "../graphql/generated";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 
@@ -12,8 +11,7 @@ type MyNotesScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "M
 
 const MyNotesScreen = () => {
   const navigation = useNavigation<MyNotesScreenNavigationProp>();
-  const { user } = useAuth();
-  const { loading, data } = useMyNotesQuery({ variables: { userId: user.id } });
+  const { loading, data } = useMyNotesQuery();
 
   const handleSelectNote = useCallback(
     (id: string) => {
