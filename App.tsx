@@ -2,6 +2,7 @@ import { ApolloProvider } from "@apollo/client";
 import { NavigationContainer } from "@react-navigation/native";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
 
 import { AuthProvider } from "./src/context/AuthContext";
@@ -18,6 +19,7 @@ export default function App() {
       <AuthProvider>
         <LocationProvider>
           <KeyboardInsetProvider>
+            <StatusBar style="dark" />
             <NavigationContainer>
               <MainStack />
             </NavigationContainer>

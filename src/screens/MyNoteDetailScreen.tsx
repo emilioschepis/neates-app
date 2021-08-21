@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 8,
-    backgroundColor: "yellow",
+    backgroundColor: "#FFC61E",
     borderWidth: 2,
     borderColor: "rgb(192, 192, 0)",
     aspectRatio: 1,

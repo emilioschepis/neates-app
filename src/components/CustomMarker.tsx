@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   container: {
     width: 20,
     height: 20,
-    backgroundColor: "yellow",
+    backgroundColor: "#FFC61E",
     transform: [{ rotate: "10deg" }],
     borderWidth: 1,
     borderColor: "rgb(192,192,0)",

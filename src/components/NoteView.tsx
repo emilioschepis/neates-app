@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: "yellow",
+    backgroundColor: "#FFC61E",
     borderColor: "rgb(192, 192, 0)",
     borderWidth: 2,
     padding: 16,
