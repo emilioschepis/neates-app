@@ -51,6 +51,16 @@ const ProfileScreen = () => {
               View my notes
             </Text>
           </Pressable>
+          <View style={styles.spacer} />
+          <Pressable
+            onPress={() => navigation.navigate("Statistics")}
+            style={({ pressed }) => [styles.box, { opacity: pressed ? 0.6 : 1 }]}
+          >
+            <Ionicons name="bar-chart" size={24} color={theme.colors.primary} />
+            <Text numberOfLines={1} style={styles.boxText}>
+              Statistics
+            </Text>
+          </Pressable>
         </View>
       </View>
 

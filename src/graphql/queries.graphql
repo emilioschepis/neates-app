@@ -44,6 +44,29 @@ query MyNotes {
   }
 }
 
+query Statistics {
+  notes: note_aggregate {
+    aggregate {
+      count
+    }
+  }
+  views: note_view_aggregate {
+    aggregate {
+      count
+    }
+  }
+  most_viewed: note(order_by: { views_aggregate: { count: desc } }, limit: 3) {
+    id
+    content
+    createdAt: created_at
+    views_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}
+
 query User($userId: String!) {
   user: user_by_pk(id: $userId) {
     username

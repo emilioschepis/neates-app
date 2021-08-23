@@ -7,6 +7,7 @@ import MyNotesScreen from "../screens/MyNotesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import StatisticsScreen from "../screens/StatisticsScreen";
 
 export type ProfileStackParamList = {
   SignUp: undefined;
@@ -17,6 +18,7 @@ export type ProfileStackParamList = {
     id: string;
     content: string;
   };
+  Statistics: undefined;
 };
 
 const Stack = createStackNavigator<ProfileStackParamList>();
@@ -36,6 +38,7 @@ const ProfileStack = () => {
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="MyNotes" component={MyNotesScreen} options={{ headerTitle: "My notes" }} />
           <Stack.Screen name="MyNoteDetail" component={MyNoteDetailScreen} options={{ headerTitle: "" }} />
+          <Stack.Screen name="Statistics" component={StatisticsScreen} options={{ headerTitle: "Statistics" }} />
         </>
       )}
     </Stack.Navigator>

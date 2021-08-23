@@ -207,6 +207,28 @@ export type NoteViews_AggregateArgs = {
   where?: Maybe<Note_View_Bool_Exp>;
 };
 
+/** aggregated selection of "note" */
+export type Note_Aggregate = {
+  __typename?: 'note_aggregate';
+  aggregate?: Maybe<Note_Aggregate_Fields>;
+  nodes: Array<Note>;
+};
+
+/** aggregate fields of "note" */
+export type Note_Aggregate_Fields = {
+  __typename?: 'note_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Note_Max_Fields>;
+  min?: Maybe<Note_Min_Fields>;
+};
+
+
+/** aggregate fields of "note" */
+export type Note_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Note_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
 /** Boolean expression to filter rows from the table "note". All fields are combined with a logical 'AND'. */
 export type Note_Bool_Exp = {
   _and?: Maybe<Array<Note_Bool_Exp>>;
@@ -219,6 +241,24 @@ export type Note_Bool_Exp = {
   user?: Maybe<User_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
   views?: Maybe<Note_View_Bool_Exp>;
+};
+
+/** aggregate max on columns */
+export type Note_Max_Fields = {
+  __typename?: 'note_max_fields';
+  content?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Note_Min_Fields = {
+  __typename?: 'note_min_fields';
+  content?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  user_id?: Maybe<Scalars['String']>;
 };
 
 /** response of any mutation on the table "note" */
@@ -376,6 +416,8 @@ export type Query_Root = {
   get_notes: Array<GetNotesOutput>;
   /** fetch data from the table: "note" */
   note: Array<Note>;
+  /** fetch aggregated fields from the table: "note" */
+  note_aggregate: Note_Aggregate;
   /** fetch data from the table: "note" using primary key columns */
   note_by_pk?: Maybe<Note>;
   /** fetch data from the table: "note_view" */
@@ -401,6 +443,15 @@ export type Query_RootGet_NotesArgs = {
 
 
 export type Query_RootNoteArgs = {
+  distinct_on?: Maybe<Array<Note_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_Order_By>>;
+  where?: Maybe<Note_Bool_Exp>;
+};
+
+
+export type Query_RootNote_AggregateArgs = {
   distinct_on?: Maybe<Array<Note_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -460,6 +511,8 @@ export type Subscription_Root = {
   __typename?: 'subscription_root';
   /** fetch data from the table: "note" */
   note: Array<Note>;
+  /** fetch aggregated fields from the table: "note" */
+  note_aggregate: Note_Aggregate;
   /** fetch data from the table: "note" using primary key columns */
   note_by_pk?: Maybe<Note>;
   /** fetch data from the table: "note_view" */
@@ -474,6 +527,15 @@ export type Subscription_Root = {
 
 
 export type Subscription_RootNoteArgs = {
+  distinct_on?: Maybe<Array<Note_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Note_Order_By>>;
+  where?: Maybe<Note_Bool_Exp>;
+};
+
+
+export type Subscription_RootNote_AggregateArgs = {
   distinct_on?: Maybe<Array<Note_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -673,6 +735,37 @@ export type MyNotesQueryVariables = Exact<{ [key: string]: never; }>;
 export type MyNotesQuery = (
   { __typename?: 'query_root' }
   & { notes: Array<(
+    { __typename?: 'note' }
+    & Pick<Note, 'id' | 'content'>
+    & { createdAt: Note['created_at'] }
+    & { views_aggregate: (
+      { __typename?: 'note_view_aggregate' }
+      & { aggregate?: Maybe<(
+        { __typename?: 'note_view_aggregate_fields' }
+        & Pick<Note_View_Aggregate_Fields, 'count'>
+      )> }
+    ) }
+  )> }
+);
+
+export type StatisticsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StatisticsQuery = (
+  { __typename?: 'query_root' }
+  & { notes: (
+    { __typename?: 'note_aggregate' }
+    & { aggregate?: Maybe<(
+      { __typename?: 'note_aggregate_fields' }
+      & Pick<Note_Aggregate_Fields, 'count'>
+    )> }
+  ), views: (
+    { __typename?: 'note_view_aggregate' }
+    & { aggregate?: Maybe<(
+      { __typename?: 'note_view_aggregate_fields' }
+      & Pick<Note_View_Aggregate_Fields, 'count'>
+    )> }
+  ), most_viewed: Array<(
     { __typename?: 'note' }
     & Pick<Note, 'id' | 'content'>
     & { createdAt: Note['created_at'] }
@@ -937,6 +1030,57 @@ export function useMyNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<My
 export type MyNotesQueryHookResult = ReturnType<typeof useMyNotesQuery>;
 export type MyNotesLazyQueryHookResult = ReturnType<typeof useMyNotesLazyQuery>;
 export type MyNotesQueryResult = Apollo.QueryResult<MyNotesQuery, MyNotesQueryVariables>;
+export const StatisticsDocument = gql`
+    query Statistics {
+  notes: note_aggregate {
+    aggregate {
+      count
+    }
+  }
+  views: note_view_aggregate {
+    aggregate {
+      count
+    }
+  }
+  most_viewed: note(order_by: {views_aggregate: {count: desc}}, limit: 3) {
+    id
+    content
+    createdAt: created_at
+    views_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useStatisticsQuery__
+ *
+ * To run a query within a React component, call `useStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStatisticsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStatisticsQuery(baseOptions?: Apollo.QueryHookOptions<StatisticsQuery, StatisticsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StatisticsQuery, StatisticsQueryVariables>(StatisticsDocument, options);
+      }
+export function useStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatisticsQuery, StatisticsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StatisticsQuery, StatisticsQueryVariables>(StatisticsDocument, options);
+        }
+export type StatisticsQueryHookResult = ReturnType<typeof useStatisticsQuery>;
+export type StatisticsLazyQueryHookResult = ReturnType<typeof useStatisticsLazyQuery>;
+export type StatisticsQueryResult = Apollo.QueryResult<StatisticsQuery, StatisticsQueryVariables>;
 export const UserDocument = gql`
     query User($userId: String!) {
   user: user_by_pk(id: $userId) {
