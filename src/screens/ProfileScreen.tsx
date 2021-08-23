@@ -51,8 +51,6 @@ const ProfileScreen = () => {
               View my notes
             </Text>
           </Pressable>
-          <View style={styles.spacer} />
-          <View style={styles.box} />
         </View>
       </View>
 
