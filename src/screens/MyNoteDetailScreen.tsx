@@ -28,7 +28,7 @@ const MyNoteDetailScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <Text>{route.params.content}</Text>
+        <Text style={styles.contentText}>{route.params.content}</Text>
       </View>
       <View style={styles.infoContainer}>
         {loading || !data ? (
@@ -77,6 +77,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
+  },
+  contentText: {
+    fontSize: 16,
+    fontStyle: "italic",
   },
   infoContainer: {
     flex: 1,
