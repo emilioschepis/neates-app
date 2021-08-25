@@ -1,10 +1,12 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { RouteProp, useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import dayjs from "dayjs";
 import React, { useCallback } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import DestructiveButton from "../components/core/DestructiveButton";
+import Spacer from "../components/core/Spacer";
 import { useDeleteNoteMutation, useMyNoteQuery } from "../graphql/generated";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 import { updateCacheAfterDeleteNote, updateCacheWith } from "../utils/cacheUtils";
@@ -13,6 +15,7 @@ type MyNoteDetailScreenNavigationProp = StackNavigationProp<ProfileStackParamLis
 type MyNoteDetailScreenRouteProp = RouteProp<ProfileStackParamList, "MyNoteDetail">;
 
 const MyNoteDetailScreen = () => {
+  const theme = useTheme();
   const route = useRoute<MyNoteDetailScreenRouteProp>();
   const navigation = useNavigation<MyNoteDetailScreenNavigationProp>();
   const { loading, data } = useMyNoteQuery({ variables: { noteId: route.params.id } });
@@ -26,42 +29,51 @@ const MyNoteDetailScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.contentContainer}>
         <Text style={styles.contentText}>{route.params.content}</Text>
       </View>
-      <View style={styles.infoContainer}>
-        {loading || !data ? (
-          <View style={styles.loader}>
-            <ActivityIndicator />
+      {loading || !data ? (
+        <View style={styles.loader}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <View style={styles.infoContainer}>
+          {data.note?.mapImageUrl ? (
+            <>
+              <View style={styles.infoElementContainer}>
+                <Image resizeMode="contain" source={{ uri: data.note.mapImageUrl }} style={styles.mapImage} />
+              </View>
+              <Spacer height={16} />
+            </>
+          ) : null}
+          <View style={styles.infoElementContainer}>
+            <Ionicons name="eye" color={theme.colors.primary} size={20} />
+            <Spacer width={8} />
+            <Text>Viewed {data.note?.views_aggregate.aggregate?.count ?? 0} times</Text>
           </View>
-        ) : (
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>Info about this note:</Text>
-            <Text style={styles.infoDetailText}>Created {dayjs(data.note?.createdAt).format("LLL")}</Text>
-            <Text style={styles.infoDetailText}>
-              Located at {data.note?.location.coordinates[1]} {data.note?.location.coordinates[0]}
-            </Text>
-            <Text style={styles.infoDetailText}>
-              Viewed by {data.note?.views_aggregate.aggregate?.count ?? 0} people
-            </Text>
+          <Spacer height={16} />
+          <View style={styles.infoElementContainer}>
+            <Ionicons name="time" color={theme.colors.primary} size={20} />
+            <Spacer width={8} />
+            <Text>Created {dayjs(data.note?.createdAt).format("LLL")}</Text>
           </View>
-        )}
-        <DestructiveButton
-          loading={deleting}
-          confirmationMessage="Deleting this note is irreversible."
-          onPress={handleDelete}
-        >
-          Delete note
-        </DestructiveButton>
-      </View>
-    </View>
+          <Spacer height={16} />
+          <DestructiveButton
+            loading={deleting}
+            confirmationMessage="Deleting this note is irreversible."
+            onPress={handleDelete}
+          >
+            Delete note
+          </DestructiveButton>
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
   },
   loader: {
@@ -79,20 +91,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
   },
+  mapImage: {
+    flex: 1,
+    aspectRatio: 2,
+    borderRadius: 8,
+    borderColor: "lightgray",
+    borderWidth: 2,
+  },
   contentText: {
     fontSize: 16,
     fontStyle: "italic",
   },
   infoContainer: {
-    flex: 1,
-    marginVertical: 8,
+    marginTop: 16,
   },
-  infoText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  infoDetailText: {
-    marginTop: 4,
+  infoElementContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: "white",
   },
 });
 

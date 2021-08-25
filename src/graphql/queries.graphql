@@ -28,6 +28,7 @@ query MyNote($noteId: uuid!) {
         count
       }
     }
+    mapImageUrl: map_image_url
   }
 }
 

@@ -32,6 +32,7 @@ export type GetNoteOutput = {
   content: Scalars['String'];
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
+  map_image_url?: Maybe<Scalars['String']>;
   username: Scalars['String'];
   view_count: Scalars['Int'];
 };
@@ -178,6 +179,7 @@ export type Note = {
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
   location: Scalars['geography'];
+  map_image_url?: Maybe<Scalars['String']>;
   /** An object relationship */
   user: User;
   user_id: Scalars['String'];
@@ -238,6 +240,7 @@ export type Note_Bool_Exp = {
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   location?: Maybe<Geography_Comparison_Exp>;
+  map_image_url?: Maybe<String_Comparison_Exp>;
   user?: Maybe<User_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
   views?: Maybe<Note_View_Bool_Exp>;
@@ -249,6 +252,7 @@ export type Note_Max_Fields = {
   content?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  map_image_url?: Maybe<Scalars['String']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -258,6 +262,7 @@ export type Note_Min_Fields = {
   content?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  map_image_url?: Maybe<Scalars['String']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -276,6 +281,7 @@ export type Note_Order_By = {
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   location?: Maybe<Order_By>;
+  map_image_url?: Maybe<Order_By>;
   user?: Maybe<User_Order_By>;
   user_id?: Maybe<Order_By>;
   views_aggregate?: Maybe<Note_View_Aggregate_Order_By>;
@@ -296,6 +302,8 @@ export enum Note_Select_Column {
   Id = 'id',
   /** column name */
   Location = 'location',
+  /** column name */
+  MapImageUrl = 'map_image_url',
   /** column name */
   UserId = 'user_id'
 }
@@ -718,7 +726,7 @@ export type MyNoteQuery = (
   & { note?: Maybe<(
     { __typename?: 'note' }
     & Pick<Note, 'id' | 'location' | 'content'>
-    & { createdAt: Note['created_at'] }
+    & { createdAt: Note['created_at'], mapImageUrl: Note['map_image_url'] }
     & { views_aggregate: (
       { __typename?: 'note_view_aggregate' }
       & { aggregate?: Maybe<(
@@ -958,6 +966,7 @@ export const MyNoteDocument = gql`
         count
       }
     }
+    mapImageUrl: map_image_url
   }
 }
     `;
