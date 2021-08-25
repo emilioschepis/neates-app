@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -32,7 +31,6 @@ export type GetNoteOutput = {
   content: Scalars['String'];
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  map_image_url?: Maybe<Scalars['String']>;
   username: Scalars['String'];
   view_count: Scalars['Int'];
 };
@@ -663,30 +661,14 @@ export type CreateNoteMutationVariables = Exact<{
 }>;
 
 
-export type CreateNoteMutation = (
-  { __typename?: 'mutation_root' }
-  & { create_note: (
-    { __typename?: 'CreateNoteOutput' }
-    & { note: (
-      { __typename?: 'note' }
-      & Pick<Note, 'id' | 'content'>
-      & { createdAt: Note['created_at'] }
-    ) }
-  ) }
-);
+export type CreateNoteMutation = { __typename?: 'mutation_root', create_note: { __typename?: 'CreateNoteOutput', note: { __typename?: 'note', id: any, content: string, createdAt: any } } };
 
 export type DeleteNoteMutationVariables = Exact<{
   noteId: Scalars['uuid'];
 }>;
 
 
-export type DeleteNoteMutation = (
-  { __typename?: 'mutation_root' }
-  & { delete_note?: Maybe<(
-    { __typename?: 'note' }
-    & Pick<Note, 'id'>
-  )> }
-);
+export type DeleteNoteMutation = { __typename?: 'mutation_root', delete_note?: Maybe<{ __typename?: 'note', id: any }> };
 
 export type NotesQueryVariables = Exact<{
   latitude: Scalars['Float'];
@@ -694,111 +676,38 @@ export type NotesQueryVariables = Exact<{
 }>;
 
 
-export type NotesQuery = (
-  { __typename?: 'query_root' }
-  & { notes: Array<(
-    { __typename?: 'GetNotesOutput' }
-    & Pick<GetNotesOutput, 'id' | 'content' | 'latitude' | 'longitude'>
-  )> }
-);
+export type NotesQuery = { __typename?: 'query_root', notes: Array<{ __typename?: 'GetNotesOutput', id: any, content: string, latitude: number, longitude: number }> };
 
 export type NoteQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type NoteQuery = (
-  { __typename?: 'query_root' }
-  & { note: (
-    { __typename?: 'GetNoteOutput' }
-    & Pick<GetNoteOutput, 'id' | 'content' | 'username'>
-    & { createdAt: GetNoteOutput['created_at'], viewCount: GetNoteOutput['view_count'] }
-  ) }
-);
+export type NoteQuery = { __typename?: 'query_root', note: { __typename?: 'GetNoteOutput', id: any, content: string, username: string, createdAt: any, viewCount: number } };
 
 export type MyNoteQueryVariables = Exact<{
   noteId: Scalars['uuid'];
 }>;
 
 
-export type MyNoteQuery = (
-  { __typename?: 'query_root' }
-  & { note?: Maybe<(
-    { __typename?: 'note' }
-    & Pick<Note, 'id' | 'location' | 'content'>
-    & { createdAt: Note['created_at'], mapImageUrl: Note['map_image_url'] }
-    & { views_aggregate: (
-      { __typename?: 'note_view_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'note_view_aggregate_fields' }
-        & Pick<Note_View_Aggregate_Fields, 'count'>
-      )> }
-    ) }
-  )> }
-);
+export type MyNoteQuery = { __typename?: 'query_root', note?: Maybe<{ __typename?: 'note', id: any, location: any, content: string, createdAt: any, mapImageUrl?: Maybe<string>, views_aggregate: { __typename?: 'note_view_aggregate', aggregate?: Maybe<{ __typename?: 'note_view_aggregate_fields', count: number }> } }> };
 
 export type MyNotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyNotesQuery = (
-  { __typename?: 'query_root' }
-  & { notes: Array<(
-    { __typename?: 'note' }
-    & Pick<Note, 'id' | 'content'>
-    & { createdAt: Note['created_at'] }
-    & { views_aggregate: (
-      { __typename?: 'note_view_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'note_view_aggregate_fields' }
-        & Pick<Note_View_Aggregate_Fields, 'count'>
-      )> }
-    ) }
-  )> }
-);
+export type MyNotesQuery = { __typename?: 'query_root', notes: Array<{ __typename?: 'note', id: any, content: string, createdAt: any, views_aggregate: { __typename?: 'note_view_aggregate', aggregate?: Maybe<{ __typename?: 'note_view_aggregate_fields', count: number }> } }> };
 
 export type StatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StatisticsQuery = (
-  { __typename?: 'query_root' }
-  & { notes: (
-    { __typename?: 'note_aggregate' }
-    & { aggregate?: Maybe<(
-      { __typename?: 'note_aggregate_fields' }
-      & Pick<Note_Aggregate_Fields, 'count'>
-    )> }
-  ), views: (
-    { __typename?: 'note_view_aggregate' }
-    & { aggregate?: Maybe<(
-      { __typename?: 'note_view_aggregate_fields' }
-      & Pick<Note_View_Aggregate_Fields, 'count'>
-    )> }
-  ), most_viewed: Array<(
-    { __typename?: 'note' }
-    & Pick<Note, 'id' | 'content'>
-    & { createdAt: Note['created_at'] }
-    & { views_aggregate: (
-      { __typename?: 'note_view_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'note_view_aggregate_fields' }
-        & Pick<Note_View_Aggregate_Fields, 'count'>
-      )> }
-    ) }
-  )> }
-);
+export type StatisticsQuery = { __typename?: 'query_root', notes: { __typename?: 'note_aggregate', aggregate?: Maybe<{ __typename?: 'note_aggregate_fields', count: number }> }, views: { __typename?: 'note_view_aggregate', aggregate?: Maybe<{ __typename?: 'note_view_aggregate_fields', count: number }> }, most_viewed: Array<{ __typename?: 'note', id: any, content: string, createdAt: any, views_aggregate: { __typename?: 'note_view_aggregate', aggregate?: Maybe<{ __typename?: 'note_view_aggregate_fields', count: number }> } }> };
 
 export type UserQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type UserQuery = (
-  { __typename?: 'query_root' }
-  & { user?: Maybe<(
-    { __typename?: 'user' }
-    & Pick<User, 'username'>
-  )> }
-);
+export type UserQuery = { __typename?: 'query_root', user?: Maybe<{ __typename?: 'user', username: string }> };
 
 
 export const CreateNoteDocument = gql`

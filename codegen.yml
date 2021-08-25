@@ -10,8 +10,6 @@ documents:
 generates:
   src/graphql/generated.tsx:
     plugins:
-      - add:
-          content: "/* eslint-disable */"
       - typescript
       - typescript-operations
       - typescript-react-apollo

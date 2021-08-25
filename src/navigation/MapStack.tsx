@@ -1,4 +1,4 @@
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 
 import CreateNoteScreen from "../screens/CreateNoteScreen";
@@ -9,7 +9,7 @@ export type MapStackParamList = {
   CreateNote: undefined;
 };
 
-const Stack = createStackNavigator<MapStackParamList>();
+const Stack = createNativeStackNavigator<MapStackParamList>();
 
 const MapStack = () => {
   return (

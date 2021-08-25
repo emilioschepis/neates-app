@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp, useNavigation, useRoute, useTheme } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import dayjs from "dayjs";
 import React, { useCallback } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -11,7 +11,7 @@ import { useDeleteNoteMutation, useMyNoteQuery } from "../graphql/generated";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 import { updateCacheAfterDeleteNote, updateCacheWith } from "../utils/cacheUtils";
 
-type MyNoteDetailScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "MyNoteDetail">;
+type MyNoteDetailScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, "MyNoteDetail">;
 type MyNoteDetailScreenRouteProp = RouteProp<ProfileStackParamList, "MyNoteDetail">;
 
 const MyNoteDetailScreen = () => {

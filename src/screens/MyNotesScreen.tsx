@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
@@ -7,7 +7,7 @@ import MyNotesList from "../components/MyNotesList";
 import { useMyNotesQuery } from "../graphql/generated";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 
-type MyNotesScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "MyNotes">;
+type MyNotesScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, "MyNotes">;
 
 const MyNotesScreen = () => {
   const navigation = useNavigation<MyNotesScreenNavigationProp>();

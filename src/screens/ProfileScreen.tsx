@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -10,7 +10,7 @@ import firebase from "../firebase/firebase";
 import { useUserQuery } from "../graphql/generated";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 
-type ProfileScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "Profile">;
+type ProfileScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, "Profile">;
 
 const ProfileScreen = () => {
   const theme = useTheme();

@@ -11,18 +11,22 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Map"
+        name="MapTab"
         component={MapStack}
         options={{
+          headerShown: false,
+          tabBarLabel: "Map",
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name={focused ? "map" : "map-outline"} color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="ProfileTab"
         component={ProfileStack}
         options={{
+          headerShown: false,
+          tabBarLabel: "Profile",
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name={focused ? "person-circle" : "person-circle-outline"} color={color} size={size} />
           ),

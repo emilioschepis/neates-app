@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import useNotes from "../hooks/useNotes";
 import { MapStackParamList } from "../navigation/MapStack";
 
-type MapScreenNavigationProp = StackNavigationProp<MapStackParamList, "Map">;
+type MapScreenNavigationProp = NativeStackNavigationProp<MapStackParamList, "Map">;
 
 const MapScreen = () => {
   const { isAnonymous } = useAuth();

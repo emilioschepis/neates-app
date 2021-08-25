@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ExpoLocation from "expo-location";
 import React, { useCallback } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -11,7 +11,7 @@ import { useCreateNoteMutation } from "../graphql/generated";
 import { MapStackParamList } from "../navigation/MapStack";
 import { updateCacheAfterCreateNote, updateCacheWith } from "../utils/cacheUtils";
 
-type CreateNoteScreenNavigationProp = StackNavigationProp<MapStackParamList, "CreateNote">;
+type CreateNoteScreenNavigationProp = NativeStackNavigationProp<MapStackParamList, "CreateNote">;
 
 const CreateNoteScreen = () => {
   const { granted } = useLocation();

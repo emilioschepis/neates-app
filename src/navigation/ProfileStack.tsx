@@ -1,4 +1,4 @@
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 
 import { useAuth } from "../context/AuthContext";
@@ -21,7 +21,7 @@ export type ProfileStackParamList = {
   Statistics: undefined;
 };
 
-const Stack = createStackNavigator<ProfileStackParamList>();
+const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 const ProfileStack = () => {
   const { isAnonymous } = useAuth();

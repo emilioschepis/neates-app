@@ -1,5 +1,5 @@
 import { useNavigation, useTheme } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -8,7 +8,7 @@ import SignInForm, { SignInFormData } from "../components/SignInForm";
 import firebase from "../firebase/firebase";
 import { ProfileStackParamList } from "../navigation/ProfileStack";
 
-type SignInScreenNavigationProp = StackNavigationProp<ProfileStackParamList, "SignIn">;
+type SignInScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, "SignIn">;
 
 const SignInScreen = () => {
   const theme = useTheme();
