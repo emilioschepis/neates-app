@@ -13,9 +13,9 @@ type Environment = {
 
 export const LocalEnvironment: Environment = {
   firebase: {
-    apiKey: "AIzaSyBD5QhXg-O3lj11l3zLsDKl_e6lVINLlwM",
-    authDomain: "geonotes-prod.firebaseapp.com",
-    projectId: "geonotes-prod",
+    apiKey: "AIzaSyAC88Tm9qGu2DZuWT0LgMqysB9YtcW9U8E",
+    authDomain: "neates-prod.firebaseapp.com",
+    projectId: "neates-prod",
   },
   graphql: {
     endpoint: "http://localhost:8080",
@@ -24,12 +24,12 @@ export const LocalEnvironment: Environment = {
 
 export const ProdEnvironment: Environment = {
   firebase: {
-    apiKey: "AIzaSyBD5QhXg-O3lj11l3zLsDKl_e6lVINLlwM",
-    authDomain: "geonotes-prod.firebaseapp.com",
-    projectId: "geonotes-prod",
+    apiKey: "AIzaSyAC88Tm9qGu2DZuWT0LgMqysB9YtcW9U8E",
+    authDomain: "neates-prod.firebaseapp.com",
+    projectId: "neates-prod",
   },
   graphql: {
-    endpoint: "https://geonotes-prod.herokuapp.com",
+    endpoint: "https://neates-prod.herokuapp.com",
   },
 };
 
@@ -39,7 +39,7 @@ export const CurrentEnvironment: Environment = (() => {
   }
 
   switch (Updates.releaseChannel?.toLowerCase()) {
-    case "production":
+    case "prod":
       return ProdEnvironment;
     default:
       return LocalEnvironment;

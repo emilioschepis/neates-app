@@ -11,7 +11,7 @@ jobs:
     name: Deploy changes to the production release channel
     runs-on: ubuntu-latest
     env:
-      EXPO_RELEASE_CHANNEL: production
+      EXPO_RELEASE_CHANNEL: prod
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     steps:
       - uses: actions/checkout@v2

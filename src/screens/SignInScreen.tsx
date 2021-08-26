@@ -30,7 +30,7 @@ const SignInScreen = () => {
       <Text style={styles.welcomeText}>Welcome back</Text>
       <SignInForm error={error} onSubmit={handleSignIn} />
       <View style={styles.signInContainer}>
-        <Text style={styles.signUpPromptText}>New to Geonotes?</Text>
+        <Text style={styles.signUpPromptText}>New to Neates?</Text>
         <Pressable
           onPress={handleSignUp}
           style={({ pressed }) => [styles.signUpButton, { opacity: pressed ? 0.6 : 1.0 }]}

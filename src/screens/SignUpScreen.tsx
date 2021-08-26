@@ -29,7 +29,7 @@ const SignUpScreen = () => {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Text style={styles.welcomeText}>
-        Welcome to <Text style={{ color: theme.colors.primary }}>Geonotes</Text>
+        Welcome to <Text style={{ color: theme.colors.primary }}>Neates</Text>
       </Text>
       <Text style={styles.promptText}>
         Sign up now to create your own notes and share them with people around the world.
