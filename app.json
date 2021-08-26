@@ -2,7 +2,7 @@
   "expo": {
     "name": "Neates",
     "slug": "neates",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -15,7 +15,12 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": false
+      "buildNumber": "1.0.0",
+      "bundleIdentifier": "com.emilioschepis.neates",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Neates uses your location to show you notes that are near you."
+      }
     },
     "android": {
       "adaptiveIcon": {
