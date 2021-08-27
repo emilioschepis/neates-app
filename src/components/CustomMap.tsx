@@ -1,3 +1,4 @@
+import * as Location from "expo-location";
 import React, { useRef } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { Callout, Marker as MarkerView } from "react-native-maps";
@@ -32,10 +33,12 @@ const CustomMap = ({ notes, buttons, onSelectNote }: CustomMapProps) => {
   const mapRef = useRef<MapView | null>(null);
   const { location } = useLocation();
 
-  function resetMapRegion() {
+  async function resetMapRegion() {
+    const latestLocation = await Location.getLastKnownPositionAsync();
+
     mapRef.current?.animateToRegion({
-      latitude: location.latitude,
-      longitude: location.longitude,
+      latitude: latestLocation?.coords.latitude ?? location.latitude,
+      longitude: latestLocation?.coords.longitude ?? location.longitude,
       latitudeDelta: 0.002,
       longitudeDelta: 0.002,
     });
