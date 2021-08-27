@@ -55,9 +55,12 @@ export function updateCacheAfterCreateNote(cache: ApolloCache<CreateNoteMutation
 }
 
 export function updateCacheAfterDeleteNote(cache: ApolloCache<DeleteNoteMutation>, data: DeleteNoteMutation) {
-  const normalizedId = cache.identify({ id: data.delete_note?.id, __typename: data.delete_note?.__typename });
+  const normalizedListId = cache.identify({ id: data.delete_note?.id, __typename: data.delete_note?.__typename });
 
-  const evicted = cache.evict({ id: normalizedId });
+  // Removes the note from the map cache in case it is still visible.
+  const normalizedMapId = cache.identify({ id: data.delete_note?.id, __typename: "GetNotesOutput" });
+
+  const evicted = cache.evict({ id: normalizedListId }) && cache.evict({ id: normalizedMapId });
   if (evicted) {
     cache.gc();
   }
