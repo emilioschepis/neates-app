@@ -13,7 +13,7 @@ export type CreateNoteFormData = {
 };
 
 const schema = yup.object().shape({
-  content: yup.string().max(NoteConstants.maximumLength).required(),
+  content: yup.string().trim().min(1).max(NoteConstants.maximumLength).required(),
 });
 
 type CreateNoteFormProps = {
