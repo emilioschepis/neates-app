@@ -8,12 +8,14 @@ import CreateNoteForm, { CreateNoteFormData } from "../components/CreateNoteForm
 import KeyboardAvoidingView from "../components/KeyboardAvoidingView";
 import { useLocation } from "../context/LocationContext";
 import { useCreateNoteMutation } from "../graphql/generated";
+import useAnonymousGuard from "../hooks/useAnonymousGuard";
 import { MapStackParamList } from "../navigation/MapStack";
 import { updateCacheAfterCreateNote, updateCacheWith } from "../utils/cacheUtils";
 
 type CreateNoteScreenNavigationProp = NativeStackNavigationProp<MapStackParamList, "CreateNote">;
 
 const CreateNoteScreen = () => {
+  useAnonymousGuard();
   const { granted } = useLocation();
   const navigation = useNavigation<CreateNoteScreenNavigationProp>();
   const [createNote] = useCreateNoteMutation();
